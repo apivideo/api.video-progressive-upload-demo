@@ -10,6 +10,7 @@
     "format:check": "prettier --check \"./**/*.{js,jsx,ts,tsx}\""
   },
   "dependencies": {
+    "classnames": "^2.3.1",
     "next": "12.0.4",
     "react": "17.0.2",
     "react-dom": "17.0.2"
