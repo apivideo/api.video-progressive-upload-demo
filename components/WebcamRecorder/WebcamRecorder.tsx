@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import prettyBytes from 'pretty-bytes';
 import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 export type WebcamRecorderProps = Record<string, unknown>;
@@ -56,8 +57,11 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
       useState<ReturnType<typeof getPreferredVideoMimeType>>();
 
     const videoRef = useRef<HTMLVideoElement | null>(null);
+
     const mediaRecorder = useRef<MediaRecorder | null>(null);
+
     const blobsRecorded = useRef<Blob[]>([]);
+    const [totalSizeInBytes, setTotalSizeInBytes] = useState(0);
 
     useEffect(() => {
       setSupportedMimeType(getPreferredVideoMimeType());
@@ -88,12 +92,14 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
       }
 
       blobsRecorded.current = [];
+      setTotalSizeInBytes(0);
 
       const recorder = new MediaRecorder(cameraStream, {
         mimeType: supportedMimeType?.name
       });
       recorder.addEventListener('dataavailable', function (e) {
         blobsRecorded.current.push(e.data);
+        setTotalSizeInBytes((prev) => prev + e.data.size);
       });
       recorder.addEventListener('stop', function () {
         if (blobsRecorded.current.length === 0) {
@@ -129,11 +135,10 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
 
     return (
       <div>
-        <p>{supportedMimeType?.name}</p>
+        <p>Mime Type: {supportedMimeType?.name}</p>
+        <p>Total size on disk: {prettyBytes(totalSizeInBytes)}</p>
         <video
           className={classNames({ hidden: !isCameraStreamInitialized })}
-          width="320"
-          height="240"
           autoPlay
           ref={videoRef}
         ></video>
