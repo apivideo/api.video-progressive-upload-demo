@@ -1,7 +1,9 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
+import React from 'react';
+import { WebcamRecorder } from '../components/WebcamRecorder/WebcamRecorder';
 
-const Home: NextPage = () => {
+const ProgressiveUploadDemoPage: NextPage = () => {
   return (
     <div>
       <Head>
@@ -15,9 +17,11 @@ const Home: NextPage = () => {
         />
       </Head>
 
-      <main />
+      <main>
+        <WebcamRecorder />
+      </main>
     </div>
   );
 };
 
-export default Home;
+export default ProgressiveUploadDemoPage;
