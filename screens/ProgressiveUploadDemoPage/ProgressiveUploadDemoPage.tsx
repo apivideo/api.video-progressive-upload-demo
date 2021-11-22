@@ -1,9 +1,26 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React from 'react';
-import { WebcamRecorder } from '../../components/WebcamRecorder/WebcamRecorder';
+import React, { useCallback } from 'react';
+import {
+  WebcamRecorder,
+  WebcamRecorderProps
+} from '../../components/WebcamRecorder/WebcamRecorder';
 
 export const ProgressiveUploadDemoPage: NextPage = () => {
+  const onRecordingStarted = useCallback(() => {
+    console.log('Recording started');
+  }, []);
+
+  const onRecordingStopped = useCallback(() => {
+    console.log('Recording stopped');
+  }, []);
+
+  const onRecordingDataReceived = useCallback<
+    WebcamRecorderProps['onRecordedDataReceived']
+  >((data, isLast) => {
+    console.log('Recorded data received', data, isLast);
+  }, []);
+
   return (
     <div>
       <Head>
@@ -18,7 +35,11 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
       </Head>
 
       <main>
-        <WebcamRecorder />
+        <WebcamRecorder
+          onRecordingStarted={onRecordingStarted}
+          onRecordingStopped={onRecordingStopped}
+          onRecordedDataReceived={onRecordingDataReceived}
+        />
       </main>
     </div>
   );

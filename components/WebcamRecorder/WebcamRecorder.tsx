@@ -1,28 +1,33 @@
 import classNames from 'classnames';
-import prettyBytes from 'pretty-bytes';
 import React, { memo } from 'react';
 import { useWebcamRecorder } from './useWebcamRecorder';
 
-export type WebcamRecorderProps = Record<string, unknown>;
+export type WebcamRecorderProps = {
+  readonly onRecordingStarted: () => void;
+  readonly onRecordingStopped: () => void;
+  readonly onRecordedDataReceived: (data: Blob, isLastData: boolean) => void;
+};
 
 export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
-  function WebcamRecorder() {
+  function WebcamRecorder(props) {
+    const { onRecordingStarted, onRecordingStopped, onRecordedDataReceived } =
+      props;
+
     const {
       videoRef,
       isCameraStreamInitialized,
       isRecording,
-      totalRecordedBytes,
-      supportedMimeType,
-      downloadLink,
       onStartCamera,
       onStartRecording,
       onStopRecording
-    } = useWebcamRecorder({});
+    } = useWebcamRecorder({
+      onRecordingStarted,
+      onRecordingStopped,
+      onRecordedDataReceived
+    });
 
     return (
       <div>
-        <p>Mime Type: {supportedMimeType?.name}</p>
-        <p>Total size recorded: {prettyBytes(totalRecordedBytes)}</p>
         <video
           className={classNames({ hidden: !isCameraStreamInitialized })}
           autoPlay
@@ -48,15 +53,6 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
         >
           Stop Recording
         </button>
-        <a
-          className={classNames({
-            hidden: downloadLink === undefined || isRecording
-          })}
-          download={`demo.${supportedMimeType?.extension}`}
-          href={downloadLink}
-        >
-          Download Video
-        </a>
       </div>
     );
   }
