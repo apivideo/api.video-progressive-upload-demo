@@ -3,9 +3,9 @@ import React, { memo } from 'react';
 import { useWebcamRecorder } from './useWebcamRecorder';
 
 export type WebcamRecorderProps = {
-  readonly onRecordingStarted: () => void;
-  readonly onRecordingStopped: () => void;
-  readonly onRecordedDataReceived: (data: Blob, isLastData: boolean) => void;
+  readonly onRecordingStarted?: () => void;
+  readonly onRecordingStopped?: () => void | undefined;
+  readonly onRecordedDataReceived?: (data: Blob, isLastData: boolean) => void;
 };
 
 export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(

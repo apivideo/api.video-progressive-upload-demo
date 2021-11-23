@@ -2,9 +2,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getPreferredVideoMimeType } from './getPreferredVideoMimeType';
 
 type UseWebcamRecorderArgs = {
-  readonly onRecordingStarted: () => void;
-  readonly onRecordingStopped: () => void;
-  readonly onRecordedDataReceived: (data: Blob, isLastData: boolean) => void;
+  readonly onRecordingStarted?: () => void;
+  readonly onRecordingStopped?: () => void;
+  readonly onRecordedDataReceived?: (data: Blob, isLastData: boolean) => void;
 };
 
 export const useWebcamRecorder = (args: UseWebcamRecorderArgs) => {
@@ -53,14 +53,21 @@ export const useWebcamRecorder = (args: UseWebcamRecorderArgs) => {
     const recorder = new MediaRecorder(cameraStream, {
       mimeType: supportedMimeType?.name
     });
-    recorder.addEventListener('start', onRecordingStarted);
 
-    recorder.addEventListener('dataavailable', (event) => {
-      const isLastData = isStoppingRef.current;
-      onRecordedDataReceived(event.data, isLastData);
-    });
+    if (onRecordingStarted !== undefined) {
+      recorder.addEventListener('start', onRecordingStarted);
+    }
 
-    recorder.addEventListener('stop', onRecordingStopped);
+    if (onRecordedDataReceived !== undefined) {
+      recorder.addEventListener('dataavailable', (event) => {
+        const isLastData = isStoppingRef.current;
+        onRecordedDataReceived(event.data, isLastData);
+      });
+    }
+
+    if (onRecordingStopped !== undefined) {
+      recorder.addEventListener('stop', onRecordingStopped);
+    }
 
     recorder.start(1000); // Start recording 1 second of video into each Blob
 
