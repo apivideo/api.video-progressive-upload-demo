@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
+import { ApiVideoSvg, IconPlaySvg } from '../../assets/svg';
 import { Button } from '../../components/Button';
 import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
@@ -99,13 +99,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           )}
         >
           <div className="md:col-span-3 col-span-8">
-            <Image
-              className="pb-6"
-              src="/logo.svg"
-              width={120}
-              height={112.5}
-              alt="api.video"
-            />
+            <ApiVideoSvg className="pb-6" />
             <h1 className="text-3xl-2 font-black py-6">
               Record &amp; upload simultaneously with Progressive Upload
             </h1>
@@ -119,6 +113,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               }
               onClick={onStartRecording}
             >
+              <IconPlaySvg className="inline-block pr-2 w-auto fill-current text-white" />
               Start recording
             </Button>
           </div>
