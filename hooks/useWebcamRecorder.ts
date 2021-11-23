@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { getPreferredVideoMimeType } from './getPreferredVideoMimeType';
+import { getPreferredVideoMimeType } from '../utils/getPreferredVideoMimeType';
 
 type UseWebcamRecorderArgs = {
   readonly onRecordingStarted?: () => void;

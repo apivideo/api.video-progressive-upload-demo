@@ -5,12 +5,12 @@ import Image from 'next/image';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
-import {
-  WebcamRecorder,
-  WebcamRecorderProps
-} from '../../components/WebcamRecorder/WebcamRecorder';
 import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
+import {
+  useWebcamRecorderDemo,
+  UseWebcamRecorderDemoArgs
+} from './useWebcamRecorderDemo';
 
 const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
 
@@ -47,8 +47,8 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     console.log('Recording stopped');
   }, []);
 
-  const onRecordingDataReceived = useCallback<
-    NonNullable<WebcamRecorderProps['onRecordedDataReceived']>
+  const onRecordedDataReceived = useCallback<
+    NonNullable<UseWebcamRecorderDemoArgs['onRecordedDataReceived']>
   >(
     (data, isLast) => {
       console.log('Standard upload bufferize', data);
@@ -68,6 +68,21 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     [pguUploadLastPart, pguUploadPart, sduBufferize, sduUploadAll]
   );
 
+  const {
+    videoRef,
+    isCameraStreamInitialized,
+    isRecording,
+    recordingTimeLeftMs,
+    onStartCamera,
+    onStartRecording
+  } = useWebcamRecorderDemo({
+    onRecordingStarted,
+    onRecordingStopped,
+    onRecordedDataReceived
+  });
+
+  const isUploading = sduIsUploading || pguIsUploading;
+
   return (
     <div>
       <Head>
@@ -83,7 +98,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
             'pb-16'
           )}
         >
-          <div className="col-span-3">
+          <div className="md:col-span-3 col-span-8">
             <Image
               className="pb-6"
               src="/logo.svg"
@@ -98,15 +113,29 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               Save time and instantly share your recorded video. Try it below
               for yourself!
             </h2>
+            <button
+              disabled={
+                !isCameraStreamInitialized || isRecording || isUploading
+              }
+              onClick={onStartRecording}
+            >
+              Start recording ({prettyMilliseconds(recordingTimeLeftMs)})
+            </button>
           </div>
-          <div className="col-span-5">
-            <div className="ml-14 aspect-w-16 aspect-h-9 bg-fiord rounded-3xl overflow-hidden">
-              <WebcamRecorder
-                isUploading={sduIsUploading || pguIsUploading}
-                onRecordingStarted={onRecordingStarted}
-                onRecordingStopped={onRecordingStopped}
-                onRecordedDataReceived={onRecordingDataReceived}
-              />
+          <div className="md:col-span-5 col-span-8">
+            <div
+              className={classNames(
+                'md:ml-14',
+                'aspect-w-16 aspect-h-9',
+                'bg-fiord',
+                'rounded-3xl overflow-hidden'
+              )}
+            >
+              {isCameraStreamInitialized ? (
+                <video className="object-cover" autoPlay ref={videoRef} />
+              ) : (
+                <button onClick={onStartCamera}>Start Camera</button>
+              )}
             </div>
           </div>
         </div>
