@@ -2,6 +2,13 @@
 # yarn lockfile v1
 
 
+"@api.video/video-uploader@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@api.video/video-uploader/-/video-uploader-1.0.0.tgz#90af04b5d90ca99b0102566b36004c2eefb27c65"
+  integrity sha512-wNCdUt8Er4TrJJEXSWYxXxYVKcEHfJCyhG5REcx9LHbiwXNYD95VVCXzgj5b35Nc4x9nzmbALZlJ9kBFLnlYrQ==
+  dependencies:
+    core-js "^3.8.3"
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -854,6 +861,11 @@ core-js-pure@^3.19.0:
   version "3.19.1"
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.19.1.tgz#edffc1fc7634000a55ba05e95b3f0fe9587a5aa4"
   integrity sha512-Q0Knr8Es84vtv62ei6/6jXH/7izKmOrtrxH9WJTHLCMAVeU+8TF8z8Nr08CsH4Ot0oJKzBzJJL9SJBYIv7WlfQ==
+
+core-js@^3.8.3:
+  version "3.19.1"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.19.1.tgz#f6f173cae23e73a7d88fa23b6e9da329276c6641"
+  integrity sha512-Tnc7E9iKd/b/ff7GFbhwPVzJzPztGrChB8X8GLqoYGdEOG8IpLnK1xPyo3ZoO3HsK6TodJS58VGPOxA+hLHQMg==
 
 cosmiconfig@^7.0.1:
   version "7.0.1"
