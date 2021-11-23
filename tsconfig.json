@@ -16,6 +16,6 @@
     "incremental": true,
     "noUnusedLocals": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["next-env-custom.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "next-env.d.ts"]
 }
