@@ -13,11 +13,12 @@ module.exports = {
     // https://chir.ag/projects/name-that-color/
     colors: {
       white: '#ffffff',
-      'firefly-light': '#091429',
-      firefly: '#060c19',
-      lavenderGray: '#c3b8d8',
       fiord: '#414f6e',
-      periwinkle: '#d1ceff'
+      lavenderGray: '#c3b8d8',
+      firefly: '#060c19',
+      'firefly-light': '#091429',
+      periwinkle: '#d1ceff',
+      outrageousOrange: '#fa5b30'
     },
 
     fontFamily: {
