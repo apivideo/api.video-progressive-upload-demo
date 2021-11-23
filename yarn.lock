@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@api.video/video-uploader@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@api.video/video-uploader/-/video-uploader-1.0.0.tgz#90af04b5d90ca99b0102566b36004c2eefb27c65"
-  integrity sha512-wNCdUt8Er4TrJJEXSWYxXxYVKcEHfJCyhG5REcx9LHbiwXNYD95VVCXzgj5b35Nc4x9nzmbALZlJ9kBFLnlYrQ==
+"@api.video/video-uploader@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@api.video/video-uploader/-/video-uploader-1.0.1.tgz#48417c3ede0005b14518aebc3c135b9f0928ef4b"
+  integrity sha512-zOMvLJrCoFuHb9OU48YXYmJKxsFdd0nQtcOeRxuLaUlLc3cuoSzcHDUf+aQWFHRwgTDV9DzgGbnBb2R4w51Fwg==
   dependencies:
     core-js "^3.8.3"
 
