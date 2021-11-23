@@ -1,27 +1,37 @@
 import { VideoUploader } from '@api.video/video-uploader';
-import { useCallback, useRef, useState } from 'react';
-import { VideoUploadResponse } from '../../types/api_video';
+import { useCallback, useRef } from 'react';
+import { VideoUploadResponse } from '../types/api_video';
 
 type UseStandardUploaderArgs = {
   readonly delegatedToken: string;
+  readonly onUploadInit?: () => void;
   readonly onUploadSuccess?: (video: VideoUploadResponse) => void;
   readonly onUploadError?: (error: Error) => void;
+  readonly onBufferBytesAdded?: (bytes: number) => void;
 };
 
 export const useStandardUploader = (args: UseStandardUploaderArgs) => {
-  const { delegatedToken, onUploadSuccess, onUploadError } = args;
+  const {
+    delegatedToken,
+    onUploadInit,
+    onUploadSuccess,
+    onUploadError,
+    onBufferBytesAdded
+  } = args;
   const recordedBlobsRef = useRef<Blob[]>([]);
-  const [bufferSizeBytes, setBufferSizeBytes] = useState(0);
 
   const prepare = useCallback(() => {
+    onUploadInit?.();
     recordedBlobsRef.current = [];
-    setBufferSizeBytes(0);
-  }, []);
+  }, [onUploadInit]);
 
-  const bufferize = useCallback((data: Blob) => {
-    recordedBlobsRef.current.push(data);
-    setBufferSizeBytes((prev) => (prev += data.size));
-  }, []);
+  const bufferize = useCallback(
+    (data: Blob) => {
+      recordedBlobsRef.current.push(data);
+      onBufferBytesAdded?.(data.size);
+    },
+    [onBufferBytesAdded]
+  );
 
   const uploadAll = useCallback(() => {
     const file = new File(recordedBlobsRef.current, 'file');
@@ -38,7 +48,6 @@ export const useStandardUploader = (args: UseStandardUploaderArgs) => {
   }, [delegatedToken, onUploadError, onUploadSuccess]);
 
   return {
-    bufferSizeBytes,
     prepare,
     bufferize,
     uploadAll

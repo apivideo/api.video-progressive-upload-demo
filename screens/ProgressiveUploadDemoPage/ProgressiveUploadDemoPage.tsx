@@ -6,62 +6,26 @@ import {
   WebcamRecorder,
   WebcamRecorderProps
 } from '../../components/WebcamRecorder/WebcamRecorder';
-import { VideoUploadResponse } from '../../types/api_video';
-import { useProgressiveUploader } from './useProgressiveUploader';
-import { useStandardUploader } from './useStandardUploader';
+import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
+import { useStandardUploaderDemo } from './useStandardUploaderDemo';
 
 const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
 
 export const ProgressiveUploadDemoPage: NextPage = () => {
   const startRef = useRef<Date>();
 
-  const onStandardUploadSuccess = useCallback((video: VideoUploadResponse) => {
-    console.log('Standard upload success', video);
-    if (startRef.current !== undefined) {
-      console.log(
-        'Standard upload duration (ms)',
-        new Date().valueOf() - startRef.current.valueOf()
-      );
-    }
-  }, []);
-  const onStandardUploadError = useCallback((error: Error) => {
-    console.log('Standard upload error', error);
-  }, []);
-
-  const onProgressiveUploadSuccess = useCallback(
-    (video: VideoUploadResponse) => {
-      console.log('Progressive upload success', video);
-      if (startRef.current !== undefined) {
-        console.log(
-          'Progressive upload duration (ms)',
-          new Date().valueOf() - startRef.current.valueOf()
-        );
-      }
-    },
-    []
-  );
-  const onProgressiveUploadError = useCallback((error: Error) => {
-    console.log('Progressive upload error', error);
-  }, []);
-
-  const standardUploader = useStandardUploader({
-    delegatedToken,
-    onUploadSuccess: onStandardUploadSuccess,
-    onUploadError: onStandardUploadError
-  });
-  const progressiveUploader = useProgressiveUploader({
-    delegatedToken,
-    onUploadSuccess: onProgressiveUploadSuccess,
-    onUploadError: onProgressiveUploadError
+  const standardUploaderDemo = useStandardUploaderDemo({ delegatedToken });
+  const progressiveUploaderDemo = useProgressiveUploaderDemo({
+    delegatedToken
   });
 
   const onRecordingStarted = useCallback(() => {
     console.log('Recording started');
     startRef.current = new Date();
 
-    standardUploader.prepare();
-    progressiveUploader.prepare();
-  }, [progressiveUploader, standardUploader]);
+    standardUploaderDemo.prepare();
+    progressiveUploaderDemo.prepare();
+  }, [progressiveUploaderDemo, standardUploaderDemo]);
 
   const onRecordingStopped = useCallback(() => {
     console.log('Recording stopped');
@@ -72,20 +36,20 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
   >(
     (data, isLast) => {
       console.log('Standard upload bufferize', data);
-      standardUploader.bufferize(data);
+      standardUploaderDemo.bufferize(data);
 
       if (isLast) {
         console.log('Standard upload all started');
-        standardUploader.uploadAll();
+        standardUploaderDemo.uploadAll();
 
         console.log('Progressive upload last part', data);
-        progressiveUploader.uploadLastPart(data);
+        progressiveUploaderDemo.uploadLastPart(data);
       } else {
         console.log('Progressive upload part', data);
-        progressiveUploader.uploadPart(data);
+        progressiveUploaderDemo.uploadPart(data);
       }
     },
-    [progressiveUploader, standardUploader]
+    [progressiveUploaderDemo, standardUploaderDemo]
   );
 
   return (
@@ -109,11 +73,11 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
         />
         <p>
           Standard upload - File size on disk:{' '}
-          {prettyBytes(standardUploader.bufferSizeBytes)}
+          {prettyBytes(standardUploaderDemo.bufferSizeBytes)}
         </p>
         <p>
           Progressive upload - File size on disk:{' '}
-          {prettyBytes(progressiveUploader.bufferSizeBytes)}
+          {prettyBytes(progressiveUploaderDemo.bufferSizeBytes)}
         </p>
       </main>
     </div>

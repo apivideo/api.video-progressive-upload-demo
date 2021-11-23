@@ -1,38 +1,49 @@
 import { ProgressiveUploader } from '@api.video/video-uploader';
 import PQueue from 'p-queue';
-import { useCallback, useRef, useState } from 'react';
-import { VideoUploadResponse } from '../../types/api_video';
+import { useCallback, useRef } from 'react';
+import { VideoUploadResponse } from '../types/api_video';
 
 type UseProgressiveUploaderArgs = {
   readonly delegatedToken: string;
+  readonly onUploadInit?: () => void;
   readonly onUploadSuccess?: (video: VideoUploadResponse) => void;
   readonly onUploadError?: (error: Error) => void;
+  readonly onBufferBytesAdded?: (bytes: number) => void;
+  readonly onBufferBytesRemoved?: (bytes: number) => void;
 };
 
 export const useProgressiveUploader = (args: UseProgressiveUploaderArgs) => {
-  const { delegatedToken, onUploadSuccess, onUploadError } = args;
+  const {
+    delegatedToken,
+    onUploadInit,
+    onUploadSuccess,
+    onUploadError,
+    onBufferBytesAdded,
+    onBufferBytesRemoved
+  } = args;
   const progressiveUploaderRef = useRef<ProgressiveUploader>();
 
   // We need a queue to preserve chunks upload order, especially for slow connections.
   const partsToUploadQueueRef = useRef(new PQueue({ concurrency: 1 }));
-  const [bufferSizeBytes, setBufferSizeBytes] = useState(0);
 
   const prepare = useCallback(() => {
-    setBufferSizeBytes(0);
+    onUploadInit?.();
     partsToUploadQueueRef.current.clear();
     progressiveUploaderRef.current = new ProgressiveUploader({
       uploadToken: delegatedToken
     });
-    progressiveUploaderRef.current.onProgress((event) => {
-      if (event.uploadedBytes >= event.totalBytes) {
-        setBufferSizeBytes((prev) => prev - event.totalBytes);
-      }
-    });
-  }, [delegatedToken]);
+    if (onBufferBytesRemoved !== undefined) {
+      progressiveUploaderRef.current.onProgress((event) => {
+        if (event.uploadedBytes >= event.totalBytes) {
+          onBufferBytesRemoved(event.totalBytes);
+        }
+      });
+    }
+  }, [delegatedToken, onBufferBytesRemoved, onUploadInit]);
 
   const uploadPart = useCallback(
     async (data: Blob) => {
-      setBufferSizeBytes((prev) => prev + data.size);
+      onBufferBytesAdded?.(data.size);
       partsToUploadQueueRef.current.add(async () => {
         if (progressiveUploaderRef.current === undefined) {
           return;
@@ -42,12 +53,12 @@ export const useProgressiveUploader = (args: UseProgressiveUploaderArgs) => {
           .catch(onUploadError);
       });
     },
-    [onUploadError]
+    [onBufferBytesAdded, onUploadError]
   );
 
   const uploadLastPart = useCallback(
     (data: Blob) => {
-      setBufferSizeBytes((prev) => prev + data.size);
+      onBufferBytesAdded?.(data.size);
       partsToUploadQueueRef.current.add(async () => {
         if (progressiveUploaderRef.current === undefined) {
           return;
@@ -58,11 +69,10 @@ export const useProgressiveUploader = (args: UseProgressiveUploaderArgs) => {
           .catch(onUploadError);
       });
     },
-    [onUploadError, onUploadSuccess]
+    [onBufferBytesAdded, onUploadError, onUploadSuccess]
   );
 
   return {
-    bufferSizeBytes,
     prepare,
     uploadPart,
     uploadLastPart
