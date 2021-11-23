@@ -18,7 +18,8 @@ module.exports = {
       firefly: '#060c19',
       'firefly-light': '#091429',
       periwinkle: '#d1ceff',
-      outrageousOrange: '#fa5b30'
+      outrageousOrange: '#fa5b30',
+      botticelli: '#d9e1ec'
     },
 
     fontFamily: {

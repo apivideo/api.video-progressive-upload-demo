@@ -5,6 +5,7 @@ import Image from 'next/image';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
+import { Button } from '../../components/Button';
 import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
 import {
@@ -72,7 +73,6 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     videoRef,
     isCameraStreamInitialized,
     isRecording,
-    recordingTimeLeftMs,
     onStartCamera,
     onStartRecording
   } = useWebcamRecorderDemo({
@@ -109,18 +109,18 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
             <h1 className="text-3xl-2 font-black py-6">
               Record &amp; upload simultaneously with Progressive Upload
             </h1>
-            <h2 className="text-lavenderGray font-medium text-xl">
+            <h2 className="text-lavenderGray font-medium text-xl pb-12">
               Save time and instantly share your recorded video. Try it below
               for yourself!
             </h2>
-            <button
+            <Button
               disabled={
                 !isCameraStreamInitialized || isRecording || isUploading
               }
               onClick={onStartRecording}
             >
-              Start recording ({prettyMilliseconds(recordingTimeLeftMs)})
-            </button>
+              Start recording
+            </Button>
           </div>
           <div className="md:col-span-5 col-span-8">
             <div
@@ -134,7 +134,19 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               {isCameraStreamInitialized ? (
                 <video className="object-cover" autoPlay ref={videoRef} />
               ) : (
-                <button onClick={onStartCamera}>Start Camera</button>
+                <div
+                  className="flex items-center justify-center"
+                  role="button"
+                  onClick={onStartCamera}
+                >
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={onStartCamera}
+                  >
+                    Activate camera
+                  </Button>
+                </div>
               )}
             </div>
           </div>
