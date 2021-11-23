@@ -1,6 +1,6 @@
+import { VideoUploadResponse } from '@api.video/video-uploader/dist/src/common';
 import { useCallback, useRef, useState } from 'react';
 import { useStandardUploader } from '../../hooks/useStandardUploader';
-import { VideoUploadResponse } from '../../types/api_video';
 
 type UseStandardUploaderDemoArgs = {
   readonly delegatedToken: string;

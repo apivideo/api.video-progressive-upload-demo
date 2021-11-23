@@ -1,6 +1,6 @@
+import { VideoUploadResponse } from '@api.video/video-uploader/dist/src/common';
 import { useCallback, useRef, useState } from 'react';
 import { useProgressiveUploader } from '../../hooks/useProgressiveUploader';
-import { VideoUploadResponse } from '../../types/api_video';
 
 type UseProgressiveUploaderDemoArgs = {
   readonly delegatedToken: string;

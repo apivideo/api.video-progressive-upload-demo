@@ -1,7 +1,7 @@
 import { ProgressiveUploader } from '@api.video/video-uploader';
+import { VideoUploadResponse } from '@api.video/video-uploader/dist/src/common';
 import PQueue from 'p-queue';
 import { useCallback, useRef } from 'react';
-import { VideoUploadResponse } from '../types/api_video';
 
 type UseProgressiveUploaderArgs = {
   readonly delegatedToken: string;
