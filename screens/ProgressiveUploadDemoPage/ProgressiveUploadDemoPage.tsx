@@ -100,7 +100,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
             </h2>
           </div>
           <div className="col-span-5">
-            <div className="pl-14">
+            <div className="ml-14 aspect-w-16 aspect-h-9 bg-fiord rounded-3xl overflow-hidden">
               <WebcamRecorder
                 isUploading={sduIsUploading || pguIsUploading}
                 onRecordingStarted={onRecordingStarted}
