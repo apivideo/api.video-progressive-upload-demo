@@ -75,10 +75,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
       standardUploader.bufferize(data);
 
       if (isLast) {
-        console.log(
-          'Standard upload all started',
-          prettyBytes(standardUploader.getBufferSizeInBytes())
-        );
+        console.log('Standard upload all started');
         standardUploader.uploadAll();
 
         console.log('Progressive upload last part', data);
@@ -110,6 +107,14 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           onRecordingStopped={onRecordingStopped}
           onRecordedDataReceived={onRecordingDataReceived}
         />
+        <p>
+          Standard upload - File size on disk:{' '}
+          {prettyBytes(standardUploader.bufferSizeBytes)}
+        </p>
+        <p>
+          Progressive upload - File size on disk:{' '}
+          {prettyBytes(progressiveUploader.bufferSizeBytes)}
+        </p>
       </main>
     </div>
   );

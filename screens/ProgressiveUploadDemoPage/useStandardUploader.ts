@@ -1,5 +1,5 @@
 import { VideoUploader } from '@api.video/video-uploader';
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { VideoUploadResponse } from '../../types/api_video';
 
 type UseStandardUploaderArgs = {
@@ -11,17 +11,16 @@ type UseStandardUploaderArgs = {
 export const useStandardUploader = (args: UseStandardUploaderArgs) => {
   const { delegatedToken, onUploadSuccess, onUploadError } = args;
   const recordedBlobsRef = useRef<Blob[]>([]);
+  const [bufferSizeBytes, setBufferSizeBytes] = useState(0);
 
   const prepare = useCallback(() => {
     recordedBlobsRef.current = [];
+    setBufferSizeBytes(0);
   }, []);
 
   const bufferize = useCallback((data: Blob) => {
     recordedBlobsRef.current.push(data);
-  }, []);
-
-  const getBufferSizeInBytes = useCallback(() => {
-    return new File(recordedBlobsRef.current, 'file').size;
+    setBufferSizeBytes((prev) => (prev += data.size));
   }, []);
 
   const uploadAll = useCallback(() => {
@@ -39,9 +38,9 @@ export const useStandardUploader = (args: UseStandardUploaderArgs) => {
   }, [delegatedToken, onUploadError, onUploadSuccess]);
 
   return {
+    bufferSizeBytes,
     prepare,
     bufferize,
-    uploadAll,
-    getBufferSizeInBytes
+    uploadAll
   };
 };
