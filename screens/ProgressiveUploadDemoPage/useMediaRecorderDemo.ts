@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useWebcamRecorder } from '../../hooks/useWebcamRecorder';
+import { useScreencastRecorder } from '../../hooks/useScreencastRecorder';
+// import { useWebcamRecorder } from '../../hooks/useWebcamRecorder';
 
 /**
  * We need a file size big enough to be able to compare the speed of
@@ -8,24 +9,24 @@ import { useWebcamRecorder } from '../../hooks/useWebcamRecorder';
  */
 const recordingDurationMs = 60 * 1000; // 60 seconds
 
-export type UseWebcamRecorderDemoArgs = {
+export type UseMediaRecorderDemoArgs = {
   readonly onRecordingStarted?: () => void;
   readonly onRecordingStopped?: () => void;
   readonly onRecordedDataReceived?: (data: Blob, isLastData: boolean) => void;
 };
 
-export const useWebcamRecorderDemo = (args: UseWebcamRecorderDemoArgs) => {
+export const useMediaRecorderDemo = (args: UseMediaRecorderDemoArgs) => {
   const { onRecordingStarted, onRecordedDataReceived, onRecordingStopped } =
     args;
 
   const {
     videoRef,
-    isCameraStreamInitialized,
+    isStreamInitialized,
     isRecording,
-    onStartCamera,
+    onRequestPermissions,
     onStartRecording,
     onStopRecording
-  } = useWebcamRecorder({
+  } = useScreencastRecorder({
     onRecordingStarted,
     onRecordingStopped,
     onRecordedDataReceived
@@ -56,10 +57,10 @@ export const useWebcamRecorderDemo = (args: UseWebcamRecorderDemoArgs) => {
 
   return {
     videoRef,
-    isCameraStreamInitialized,
+    isStreamInitialized,
     isRecording,
     recordingTimeLeftMs,
-    onStartCamera,
+    onRequestPermissions,
     onStartRecording
   };
 };
