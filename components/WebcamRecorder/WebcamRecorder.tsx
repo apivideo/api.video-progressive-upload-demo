@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import prettyMilliseconds from 'pretty-ms';
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect, useMemo, useState } from 'react';
 import { useWebcamRecorder } from './useWebcamRecorder';
 
 /**
@@ -39,6 +39,15 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
       onRecordedDataReceived
     });
 
+    const statusLabel = useMemo(() => {
+      if (isRecording) {
+        return 'Recording ...';
+      }
+      if (isUploading) {
+        return 'Recording stopped, finishing upload to api.video ...';
+      }
+    }, [isRecording, isUploading]);
+
     const [recordingTimeLeftMs, setRecordingTimeLeftMs] =
       useState(recordingDurationMs);
 
@@ -62,7 +71,6 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
       onStopRecording();
     }, [onStopRecording, recordingTimeLeftMs]);
 
-    // Status
     return (
       <div>
         <video
@@ -84,6 +92,7 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
         >
           Start a new Recording for {prettyMilliseconds(recordingDurationMs)}
         </button>
+        {statusLabel !== undefined && <p>{statusLabel}</p>}
       </div>
     );
   }
