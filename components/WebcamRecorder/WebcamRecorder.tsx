@@ -39,17 +39,17 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
       onRecordedDataReceived
     });
 
+    const [recordingTimeLeftMs, setRecordingTimeLeftMs] =
+      useState(recordingDurationMs);
+
     const statusLabel = useMemo(() => {
       if (isRecording) {
-        return 'Recording ...';
+        return `Recording (${prettyMilliseconds(recordingTimeLeftMs)})...`;
       }
       if (isUploading) {
         return 'Recording stopped, finishing upload to api.video ...';
       }
-    }, [isRecording, isUploading]);
-
-    const [recordingTimeLeftMs, setRecordingTimeLeftMs] =
-      useState(recordingDurationMs);
+    }, [isRecording, isUploading, recordingTimeLeftMs]);
 
     // Start the countdown when recording starts
     useEffect(() => {
