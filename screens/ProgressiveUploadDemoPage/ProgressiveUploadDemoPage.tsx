@@ -6,12 +6,12 @@ import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
 import { ApiVideoSvg, IconPlaySvg } from '../../assets/svg';
 import { Button } from '../../components/Button';
+import {
+  useMediaRecorderDemo,
+  UseMediaRecorderDemoArgs
+} from './useMediaRecorderDemo';
 import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
-import {
-  useWebcamRecorderDemo,
-  UseWebcamRecorderDemoArgs
-} from './useWebcamRecorderDemo';
 
 const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
 
@@ -49,7 +49,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
   }, []);
 
   const onRecordedDataReceived = useCallback<
-    NonNullable<UseWebcamRecorderDemoArgs['onRecordedDataReceived']>
+    NonNullable<UseMediaRecorderDemoArgs['onRecordedDataReceived']>
   >(
     (data, isLast) => {
       console.log('Standard upload bufferize', data);
@@ -71,11 +71,11 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
 
   const {
     videoRef,
-    isCameraStreamInitialized,
+    isStreamInitialized,
     isRecording,
-    onStartCamera,
+    onRequestPermissions,
     onStartRecording
-  } = useWebcamRecorderDemo({
+  } = useMediaRecorderDemo({
     onRecordingStarted,
     onRecordingStopped,
     onRecordedDataReceived
@@ -108,9 +108,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               for yourself!
             </h2>
             <Button
-              disabled={
-                !isCameraStreamInitialized || isRecording || isUploading
-              }
+              disabled={!isStreamInitialized || isRecording || isUploading}
               onClick={onStartRecording}
             >
               <IconPlaySvg className="inline-block pr-2 w-auto fill-current text-white" />
@@ -126,18 +124,18 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
                 'rounded-3xl overflow-hidden'
               )}
             >
-              {isCameraStreamInitialized ? (
-                <video className="object-cover" autoPlay ref={videoRef} />
+              {isStreamInitialized ? (
+                <video
+                  className="object-cover rounded-3xl"
+                  autoPlay
+                  ref={videoRef}
+                />
               ) : (
-                <div
-                  className="flex items-center justify-center"
-                  role="button"
-                  onClick={onStartCamera}
-                >
+                <div className="flex items-center justify-center">
                   <Button
                     variant="secondary"
                     size="small"
-                    onClick={onStartCamera}
+                    onClick={onRequestPermissions}
                   >
                     Activate camera
                   </Button>
