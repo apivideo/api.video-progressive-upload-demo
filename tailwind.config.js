@@ -1,8 +1,11 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
+
     // https://chir.ag/projects/name-that-color/
     colors: {
       white: '#ffffff',
@@ -12,8 +15,14 @@ module.exports = {
       fiord: '#414f6e',
       periwinkle: '#d1ceff'
     },
+
     fontFamily: {
       body: ['Inter', 'sans-serif']
+    },
+
+    fontSize: {
+      ...defaultTheme.fontSize,
+      '3xl-2': '2em'
     }
   },
   variants: {

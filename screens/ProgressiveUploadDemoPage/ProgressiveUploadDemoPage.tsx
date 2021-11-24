@@ -1,5 +1,7 @@
+import classNames from 'classnames';
 import { NextPage } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
@@ -73,54 +75,80 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
         <meta name="description" content="Progressive Upload Demo" />
       </Head>
 
-      <main>
-        <WebcamRecorder
-          isUploading={sduIsUploading || pguIsUploading}
-          onRecordingStarted={onRecordingStarted}
-          onRecordingStopped={onRecordingStopped}
-          onRecordedDataReceived={onRecordingDataReceived}
-        />
-
-        <br />
-
-        <div>
-          <h1>Standard Upload</h1>
-          <p>File size: {prettyBytes(sduBufferSizeBytes)}</p>
-          <p>
-            Duration:{' '}
-            {prettyMilliseconds(sduDurationMs, {
-              colonNotation: true
-            })}
-          </p>
-          <p>
-            Video Link:{' '}
-            {sduVideoLink !== '' ? (
-              <a href={sduVideoLink} target="_blank" rel="noreferrer">
-                {sduVideoLink}
-              </a>
-            ) : null}
-          </p>
+      <main className="py-16">
+        <div
+          className={classNames(
+            'grid grid-cols-8 gap-8',
+            'mx-auto max-w-screen-xl px-8',
+            'pb-16'
+          )}
+        >
+          <div className="col-span-3">
+            <Image
+              className="pb-6"
+              src="/logo.svg"
+              width={120}
+              height={112.5}
+              alt="api.video"
+            />
+            <h1 className="text-3xl-2 font-black py-6">
+              Record &amp; upload simultaneously with Progressive Upload
+            </h1>
+            <h2 className="text-lavenderGray font-medium text-xl">
+              Save time and instantly share your recorded video. Try it below
+              for yourself!
+            </h2>
+          </div>
+          <div className="col-span-5">
+            <div className="pl-14">
+              <WebcamRecorder
+                isUploading={sduIsUploading || pguIsUploading}
+                onRecordingStarted={onRecordingStarted}
+                onRecordingStopped={onRecordingStopped}
+                onRecordedDataReceived={onRecordingDataReceived}
+              />
+            </div>
+          </div>
         </div>
 
-        <br />
+        <div className="mx-auto max-w-screen-xl px-8">
+          <div className="pb-4">
+            <h1>Standard Upload</h1>
+            <p>File size: {prettyBytes(sduBufferSizeBytes)}</p>
+            <p>
+              Duration:{' '}
+              {prettyMilliseconds(sduDurationMs, {
+                colonNotation: true
+              })}
+            </p>
+            <p>
+              Video Link:{' '}
+              {sduVideoLink !== '' ? (
+                <a href={sduVideoLink} target="_blank" rel="noreferrer">
+                  {sduVideoLink}
+                </a>
+              ) : null}
+            </p>
+          </div>
 
-        <div>
-          <h1>Progressive Upload</h1>
-          <p>File size: {prettyBytes(pguBufferSizeBytes)}</p>
-          <p>
-            Duration:{' '}
-            {prettyMilliseconds(pguDurationMs, {
-              colonNotation: true
-            })}
-          </p>
-          <p>
-            Video Link:{' '}
-            {pguVideoLink !== '' ? (
-              <a href={pguVideoLink} target="_blank" rel="noreferrer">
-                {pguVideoLink}
-              </a>
-            ) : null}
-          </p>
+          <div>
+            <h1>Progressive Upload</h1>
+            <p>File size: {prettyBytes(pguBufferSizeBytes)}</p>
+            <p>
+              Duration:{' '}
+              {prettyMilliseconds(pguDurationMs, {
+                colonNotation: true
+              })}
+            </p>
+            <p>
+              Video Link:{' '}
+              {pguVideoLink !== '' ? (
+                <a href={pguVideoLink} target="_blank" rel="noreferrer">
+                  {pguVideoLink}
+                </a>
+              ) : null}
+            </p>
+          </div>
         </div>
       </main>
     </div>
