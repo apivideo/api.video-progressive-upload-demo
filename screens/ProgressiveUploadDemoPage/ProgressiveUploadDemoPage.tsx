@@ -1,7 +1,8 @@
 import { NextPage } from 'next';
 import Head from 'next/head';
 import prettyBytes from 'pretty-bytes';
-import React, { useCallback, useRef } from 'react';
+import prettyMilliseconds from 'pretty-ms';
+import React, { useCallback } from 'react';
 import {
   WebcamRecorder,
   WebcamRecorderProps
@@ -12,20 +13,31 @@ import { useStandardUploaderDemo } from './useStandardUploaderDemo';
 const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
 
 export const ProgressiveUploadDemoPage: NextPage = () => {
-  const startRef = useRef<Date>();
+  const {
+    durationMs: sduDurationMs,
+    bufferSizeBytes: sduBufferSizeBytes,
+    videoLink: sduVideoLink,
+    prepare: sduPrepare,
+    bufferize: sduBufferize,
+    uploadAll: sduUploadAll
+  } = useStandardUploaderDemo({ delegatedToken });
 
-  const standardUploaderDemo = useStandardUploaderDemo({ delegatedToken });
-  const progressiveUploaderDemo = useProgressiveUploaderDemo({
+  const {
+    durationMs: pguDurationMs,
+    bufferSizeBytes: pguBufferSizeBytes,
+    videoLink: pguVideoLink,
+    prepare: pguPrepare,
+    uploadPart: pguUploadPart,
+    uploadLastPart: pguUploadLastPart
+  } = useProgressiveUploaderDemo({
     delegatedToken
   });
 
   const onRecordingStarted = useCallback(() => {
     console.log('Recording started');
-    startRef.current = new Date();
-
-    standardUploaderDemo.prepare();
-    progressiveUploaderDemo.prepare();
-  }, [progressiveUploaderDemo, standardUploaderDemo]);
+    sduPrepare();
+    pguPrepare();
+  }, [pguPrepare, sduPrepare]);
 
   const onRecordingStopped = useCallback(() => {
     console.log('Recording stopped');
@@ -36,20 +48,20 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
   >(
     (data, isLast) => {
       console.log('Standard upload bufferize', data);
-      standardUploaderDemo.bufferize(data);
+      sduBufferize(data);
 
       if (isLast) {
         console.log('Standard upload all started');
-        standardUploaderDemo.uploadAll();
+        sduUploadAll();
 
         console.log('Progressive upload last part', data);
-        progressiveUploaderDemo.uploadLastPart(data);
+        pguUploadLastPart(data);
       } else {
         console.log('Progressive upload part', data);
-        progressiveUploaderDemo.uploadPart(data);
+        pguUploadPart(data);
       }
     },
-    [progressiveUploaderDemo, standardUploaderDemo]
+    [pguUploadLastPart, pguUploadPart, sduBufferize, sduUploadAll]
   );
 
   return (
@@ -71,14 +83,48 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           onRecordingStopped={onRecordingStopped}
           onRecordedDataReceived={onRecordingDataReceived}
         />
-        <p>
-          Standard upload - File size on disk:{' '}
-          {prettyBytes(standardUploaderDemo.bufferSizeBytes)}
-        </p>
-        <p>
-          Progressive upload - File size on disk:{' '}
-          {prettyBytes(progressiveUploaderDemo.bufferSizeBytes)}
-        </p>
+
+        <br />
+
+        <div>
+          <h1>Standard Upload</h1>
+          <p>File size: {prettyBytes(sduBufferSizeBytes)}</p>
+          <p>
+            Duration:{' '}
+            {prettyMilliseconds(sduDurationMs, {
+              colonNotation: true
+            })}
+          </p>
+          <p>
+            Video Link:{' '}
+            {sduVideoLink !== '' ? (
+              <a href={sduVideoLink} target="_blank" rel="noreferrer">
+                {sduVideoLink}
+              </a>
+            ) : null}
+          </p>
+        </div>
+
+        <br />
+
+        <div>
+          <h1>Progressive Upload</h1>
+          <p>File size: {prettyBytes(pguBufferSizeBytes)}</p>
+          <p>
+            Duration:{' '}
+            {prettyMilliseconds(pguDurationMs, {
+              colonNotation: true
+            })}
+          </p>
+          <p>
+            Video Link:{' '}
+            {pguVideoLink !== '' ? (
+              <a href={pguVideoLink} target="_blank" rel="noreferrer">
+                {pguVideoLink}
+              </a>
+            ) : null}
+          </p>
+        </div>
       </main>
     </div>
   );

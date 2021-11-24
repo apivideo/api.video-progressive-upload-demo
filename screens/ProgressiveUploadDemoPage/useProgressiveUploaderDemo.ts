@@ -1,6 +1,7 @@
 import { VideoUploadResponse } from '@api.video/video-uploader/dist/src/common';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useProgressiveUploader } from '../../hooks/useProgressiveUploader';
+import { useStopWatch } from '../../hooks/useStopWatch';
 
 type UseProgressiveUploaderDemoArgs = {
   readonly delegatedToken: string;
@@ -11,24 +12,30 @@ export const useProgressiveUploaderDemo = (
 ) => {
   const { delegatedToken } = args;
 
-  const startRef = useRef<Date>();
+  const {
+    start: swStart,
+    stop: swStop,
+    durationMs: swDurationMs
+  } = useStopWatch();
 
   const [bufferSizeBytes, setBufferSizeBytes] = useState(0);
+  const [videoLink, setVideoLink] = useState<string>('');
 
-  const onProgressiveUploadInit = useCallback(() => setBufferSizeBytes(0), []);
+  const onProgressiveUploadInit = useCallback(() => {
+    swStart(true);
+    setBufferSizeBytes(0);
+    setVideoLink('');
+  }, [swStart]);
 
   const onProgressiveUploadSuccess = useCallback(
     (video: VideoUploadResponse) => {
       console.log('Progressive upload success', video);
-      if (startRef.current !== undefined) {
-        console.log(
-          'Progressive upload duration (ms)',
-          new Date().valueOf() - startRef.current.valueOf()
-        );
-      }
+      swStop();
+      setVideoLink(video.assets.player);
     },
-    []
+    [swStop]
   );
+
   const onProgressiveUploadError = useCallback((error: Error) => {
     console.log('Progressive upload error', error);
   }, []);
@@ -54,6 +61,8 @@ export const useProgressiveUploaderDemo = (
 
   return {
     ...progressiveUploader,
-    bufferSizeBytes
+    bufferSizeBytes,
+    durationMs: swDurationMs,
+    videoLink
   };
 };
