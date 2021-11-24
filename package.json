@@ -19,7 +19,8 @@
     "pretty-bytes": "^5.6.0",
     "pretty-ms": "^7.0.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "video-stream-merger": "^4.0.1"
   },
   "devDependencies": {
     "@types/node": "16.11.7",
