@@ -1,8 +1,17 @@
 import classNames from 'classnames';
-import React, { memo } from 'react';
+import prettyMilliseconds from 'pretty-ms';
+import React, { memo, useEffect, useState } from 'react';
 import { useWebcamRecorder } from './useWebcamRecorder';
 
+/**
+ * We need a file size big enough to be able to compare the speed of
+ * each upload strategy in this demo.
+ * Thus, we force the webcam recording to a fixed duration.
+ */
+const recordingDurationMs = 60 * 1000; // 60 seconds
+
 export type WebcamRecorderProps = {
+  readonly isUploading?: boolean;
   readonly onRecordingStarted?: () => void;
   readonly onRecordingStopped?: () => void | undefined;
   readonly onRecordedDataReceived?: (data: Blob, isLastData: boolean) => void;
@@ -10,8 +19,12 @@ export type WebcamRecorderProps = {
 
 export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
   function WebcamRecorder(props) {
-    const { onRecordingStarted, onRecordingStopped, onRecordedDataReceived } =
-      props;
+    const {
+      isUploading,
+      onRecordingStarted,
+      onRecordingStopped,
+      onRecordedDataReceived
+    } = props;
 
     const {
       videoRef,
@@ -26,6 +39,30 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
       onRecordedDataReceived
     });
 
+    const [recordingTimeLeftMs, setRecordingTimeLeftMs] =
+      useState(recordingDurationMs);
+
+    // Start the countdown when recording starts
+    useEffect(() => {
+      if (!isRecording) {
+        return;
+      }
+      setRecordingTimeLeftMs(recordingDurationMs);
+      const intervalId = window.setInterval(() => {
+        setRecordingTimeLeftMs((prev) => prev - 1000);
+      }, 1000);
+      return () => window.clearInterval(intervalId);
+    }, [isRecording]);
+
+    // Stop recording when the countdown reaches 0
+    useEffect(() => {
+      if (recordingTimeLeftMs > 0) {
+        return;
+      }
+      onStopRecording();
+    }, [onStopRecording, recordingTimeLeftMs]);
+
+    // Status
     return (
       <div>
         <video
@@ -41,17 +78,11 @@ export const WebcamRecorder: React.FC<WebcamRecorderProps> = memo(
         </button>
         <button
           className={classNames({
-            hidden: !isCameraStreamInitialized || isRecording
+            hidden: !isCameraStreamInitialized || isRecording || isUploading
           })}
           onClick={onStartRecording}
         >
-          Start Recording
-        </button>
-        <button
-          className={classNames({ hidden: !isRecording })}
-          onClick={onStopRecording}
-        >
-          Stop Recording
+          Start a new Recording for {prettyMilliseconds(recordingDurationMs)}
         </button>
       </div>
     );

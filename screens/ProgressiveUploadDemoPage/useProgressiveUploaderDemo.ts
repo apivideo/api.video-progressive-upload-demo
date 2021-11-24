@@ -20,9 +20,11 @@ export const useProgressiveUploaderDemo = (
 
   const [bufferSizeBytes, setBufferSizeBytes] = useState(0);
   const [videoLink, setVideoLink] = useState<string>('');
+  const [isUploading, setIsUploading] = useState(false);
 
   const onProgressiveUploadInit = useCallback(() => {
     swStart(true);
+    setIsUploading(true);
     setBufferSizeBytes(0);
     setVideoLink('');
   }, [swStart]);
@@ -31,14 +33,20 @@ export const useProgressiveUploaderDemo = (
     (video: VideoUploadResponse) => {
       console.log('Progressive upload success', video);
       swStop();
+      setIsUploading(false);
       setVideoLink(video.assets.player);
     },
     [swStop]
   );
 
-  const onProgressiveUploadError = useCallback((error: Error) => {
-    console.log('Progressive upload error', error);
-  }, []);
+  const onProgressiveUploadError = useCallback(
+    (error: Error) => {
+      console.log('Progressive upload error', error);
+      swStop();
+      setIsUploading(false);
+    },
+    [swStop]
+  );
 
   const onBufferBytesAdded = useCallback(
     (bytes) => setBufferSizeBytes((prev) => prev + bytes),
@@ -63,6 +71,7 @@ export const useProgressiveUploaderDemo = (
     ...progressiveUploader,
     bufferSizeBytes,
     durationMs: swDurationMs,
-    videoLink
+    videoLink,
+    isUploading
   };
 };

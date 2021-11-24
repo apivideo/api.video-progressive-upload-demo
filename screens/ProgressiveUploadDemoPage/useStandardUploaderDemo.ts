@@ -18,9 +18,11 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
 
   const [bufferSizeBytes, setBufferSizeBytes] = useState(0);
   const [videoLink, setVideoLink] = useState<string>('');
+  const [isUploading, setIsUploading] = useState(false);
 
   const onStandardUploadInit = useCallback(() => {
     swStart(true);
+    setIsUploading(true);
     setBufferSizeBytes(0);
     setVideoLink('');
   }, [swStart]);
@@ -29,6 +31,7 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
     (video: VideoUploadResponse) => {
       console.log('Standard upload success', video);
       swStop();
+      setIsUploading(false);
       setVideoLink(video.assets.player);
     },
     [swStop]
@@ -38,6 +41,7 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
     (error: Error) => {
       console.log('Standard upload error', error);
       swStop();
+      setIsUploading(false);
     },
     [swStop]
   );
@@ -59,6 +63,7 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
     ...standardUploader,
     bufferSizeBytes,
     durationMs: swDurationMs,
-    videoLink
+    videoLink,
+    isUploading
   };
 };

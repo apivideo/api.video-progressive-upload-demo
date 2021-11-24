@@ -17,6 +17,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     durationMs: sduDurationMs,
     bufferSizeBytes: sduBufferSizeBytes,
     videoLink: sduVideoLink,
+    isUploading: sduIsUploading,
     prepare: sduPrepare,
     bufferize: sduBufferize,
     uploadAll: sduUploadAll
@@ -26,6 +27,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     durationMs: pguDurationMs,
     bufferSizeBytes: pguBufferSizeBytes,
     videoLink: pguVideoLink,
+    isUploading: pguIsUploading,
     prepare: pguPrepare,
     uploadPart: pguUploadPart,
     uploadLastPart: pguUploadLastPart
@@ -79,6 +81,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
 
       <main>
         <WebcamRecorder
+          isUploading={sduIsUploading || pguIsUploading}
           onRecordingStarted={onRecordingStarted}
           onRecordingStopped={onRecordingStopped}
           onRecordedDataReceived={onRecordingDataReceived}
