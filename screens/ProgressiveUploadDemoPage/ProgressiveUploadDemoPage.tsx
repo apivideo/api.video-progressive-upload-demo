@@ -4,7 +4,11 @@ import Head from 'next/head';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
-import { ApiVideoSvg, IconCameraRecorderSvg } from '../../assets/svg';
+import {
+  ApiVideoSvg,
+  IconCameraRecorderSvg,
+  IconGithubSvg
+} from '../../assets/svg';
 import { RecordButton } from './RecordButton';
 import {
   useMediaRecorderDemo,
@@ -198,6 +202,24 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           </div>
         </div>
       </main>
+
+      <footer
+        className={classNames(
+          'mx-auto max-w-screen-xl px-8 pt-4 pb-12',
+          'flex items-center'
+        )}
+      >
+        <span className="flex-grow">
+          Try{' '}
+          <a className="text-lavenderGray underline" href="https://api.video">
+            api.video
+          </a>{' '}
+          for free
+        </span>
+        <a href="https://github.com/apivideo" target="_blank" rel="noreferrer">
+          <IconGithubSvg />
+        </a>
+      </footer>
     </div>
   );
 };
