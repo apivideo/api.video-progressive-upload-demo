@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useScreencastRecorder } from '../../hooks/useScreencastRecorder';
 import { useWebcamRecorder } from '../../hooks/useWebcamRecorder';
 
 /**
@@ -18,6 +19,15 @@ export const useMediaRecorderDemo = (args: UseMediaRecorderDemoArgs) => {
   const { onRecordingStarted, onRecordedDataReceived, onRecordingStopped } =
     args;
 
+  const urlParams =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search);
+
+  const useRecorder =
+    urlParams && urlParams.get('screencast')
+      ? useScreencastRecorder
+      : useWebcamRecorder;
+
   const {
     videoRef,
     isStreamInitialized,
@@ -25,7 +35,7 @@ export const useMediaRecorderDemo = (args: UseMediaRecorderDemoArgs) => {
     onRequestPermissions,
     onStartRecording,
     onStopRecording
-  } = useWebcamRecorder({
+  } = useRecorder({
     onRecordingStarted,
     onRecordingStopped,
     onRecordedDataReceived
