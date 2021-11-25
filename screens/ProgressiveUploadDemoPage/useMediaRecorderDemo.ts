@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useScreencastRecorder } from '../../hooks/useScreencastRecorder';
-// import { useWebcamRecorder } from '../../hooks/useWebcamRecorder';
+import { useCallback, useEffect, useState } from 'react';
+import { useWebcamRecorder } from '../../hooks/useWebcamRecorder';
 
 /**
  * We need a file size big enough to be able to compare the speed of
@@ -26,14 +25,30 @@ export const useMediaRecorderDemo = (args: UseMediaRecorderDemoArgs) => {
     onRequestPermissions,
     onStartRecording,
     onStopRecording
-  } = useScreencastRecorder({
+  } = useWebcamRecorder({
     onRecordingStarted,
     onRecordingStopped,
     onRecordedDataReceived
   });
 
+  const onMaybeStartRecording = useCallback(async () => {
+    if (!isStreamInitialized) {
+      const stream = await onRequestPermissions();
+      if (stream !== null) {
+        onStartRecording(stream);
+      }
+      return;
+    }
+    onStartRecording();
+  }, [isStreamInitialized, onRequestPermissions, onStartRecording]);
+
   const [recordingTimeLeftMs, setRecordingTimeLeftMs] =
     useState(recordingDurationMs);
+
+  // Ask for permissions on mount
+  useEffect(() => {
+    onRequestPermissions();
+  }, [onRequestPermissions]);
 
   // Start the countdown when recording starts
   useEffect(() => {
@@ -61,6 +76,6 @@ export const useMediaRecorderDemo = (args: UseMediaRecorderDemoArgs) => {
     isRecording,
     recordingTimeLeftMs,
     onRequestPermissions,
-    onStartRecording
+    onStartRecording: onMaybeStartRecording
   };
 };

@@ -29,16 +29,24 @@ export const useWebcamRecorder = (args: UseWebcamRecorderArgs) => {
       // Ask for user permission to use webcam media stream
       const stream = await onRequestWebcamStreamPermission();
 
+      if (stream === undefined) {
+        throw new Error('useWebcamRecorder: Failed request stream permission');
+        return;
+      }
+
       setWebcamStream(stream);
 
       // Set webcam stream to the given video element
       if (videoRef.current !== null) {
         videoRef.current.srcObject = stream;
       }
+      return stream;
     } catch (error) {
+      console.error('onRequestPermissions error', error);
       setWebcamStream(null);
       videoRef.current = null;
     }
+    return null;
   }, [onRequestWebcamStreamPermission]);
 
   return {

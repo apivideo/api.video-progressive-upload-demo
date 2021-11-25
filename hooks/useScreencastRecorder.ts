@@ -32,8 +32,15 @@ export const useScreencastRecorder = (args: UseScreencastRecorderArgs) => {
 
   const onRequestPermissions = useCallback(async () => {
     try {
-      const webcamStream = await onRequestWebcamStreamPermission();
       const screenStream = await onRequestScreenStreamPermission();
+      const webcamStream = await onRequestWebcamStreamPermission();
+
+      if (screenStream === undefined || webcamStream === undefined) {
+        throw new Error(
+          'useScreencastRecorder: Failed request stream permission'
+        );
+        return;
+      }
 
       // https://github.com/t-mullen/video-stream-merger#merger--new-videostreammergeropts
       const merger = new VideoStreamMerger({
@@ -75,10 +82,14 @@ export const useScreencastRecorder = (args: UseScreencastRecorderArgs) => {
       if (videoRef.current !== null) {
         videoRef.current.srcObject = stream;
       }
+
+      return stream;
     } catch (error) {
+      console.error('onRequestPermissions', error);
       setMergedStream(null);
       videoRef.current = null;
     }
+    return null;
   }, [onRequestScreenStreamPermission, onRequestWebcamStreamPermission]);
 
   return {

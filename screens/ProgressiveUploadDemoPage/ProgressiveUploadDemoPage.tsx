@@ -4,7 +4,11 @@ import Head from 'next/head';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
-import { ApiVideoSvg, IconPlaySvg } from '../../assets/svg';
+import {
+  ApiVideoSvg,
+  IconCameraRecorderSvg,
+  IconPlaySvg
+} from '../../assets/svg';
 import { Button } from '../../components/Button';
 import {
   useMediaRecorderDemo,
@@ -69,17 +73,12 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     [pguUploadLastPart, pguUploadPart, sduBufferize, sduUploadAll]
   );
 
-  const {
-    videoRef,
-    isStreamInitialized,
-    isRecording,
-    onRequestPermissions,
-    onStartRecording
-  } = useMediaRecorderDemo({
-    onRecordingStarted,
-    onRecordingStopped,
-    onRecordedDataReceived
-  });
+  const { videoRef, isStreamInitialized, isRecording, onStartRecording } =
+    useMediaRecorderDemo({
+      onRecordingStarted,
+      onRecordingStopped,
+      onRecordedDataReceived
+    });
 
   const isUploading = sduIsUploading || pguIsUploading;
 
@@ -108,7 +107,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               for yourself!
             </h2>
             <Button
-              disabled={!isStreamInitialized || isRecording || isUploading}
+              disabled={isRecording || isUploading}
               onClick={onStartRecording}
             >
               <IconPlaySvg className="inline-block pr-2 w-auto fill-current text-white" />
@@ -131,14 +130,20 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
                   ref={videoRef}
                 />
               ) : (
-                <div className="flex items-center justify-center">
-                  <Button
-                    variant="secondary"
-                    size="small"
-                    onClick={onRequestPermissions}
-                  >
-                    Activate camera
-                  </Button>
+                <div className="flex flex-col items-center justify-center">
+                  <IconCameraRecorderSvg />
+
+                  <div className="text-center pt-8 font-medium text-sm">
+                    Press{' '}
+                    <button
+                      className="text-outrageousOrange underline"
+                      onClick={onStartRecording}
+                    >
+                      start recording
+                    </button>
+                    <br />
+                    to play with the Progressive Upload
+                  </div>
                 </div>
               )}
             </div>

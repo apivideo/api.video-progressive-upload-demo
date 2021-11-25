@@ -30,42 +30,47 @@ export const useMediaStreamRecorder = (args: UseMediaStreamRecorderArgs) => {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const isStoppingRef = useRef(false);
 
-  const onStartRecording = useCallback(() => {
-    if (stream === null) {
-      return;
-    }
+  const onStartRecording = useCallback(
+    (forceStream?: MediaStream) => {
+      const recordStream = stream || forceStream;
 
-    const recorder = new MediaRecorder(stream, {
-      mimeType: supportedMimeType?.name
-    });
+      if (!recordStream) {
+        return;
+      }
 
-    if (onRecordingStarted !== undefined) {
-      recorder.addEventListener('start', onRecordingStarted);
-    }
-
-    if (onRecordedDataReceived !== undefined) {
-      recorder.addEventListener('dataavailable', (event) => {
-        const isLastData = isStoppingRef.current;
-        onRecordedDataReceived(event.data, isLastData);
+      const recorder = new MediaRecorder(recordStream, {
+        mimeType: supportedMimeType?.name
       });
-    }
 
-    if (onRecordingStopped !== undefined) {
-      recorder.addEventListener('stop', onRecordingStopped);
-    }
+      if (onRecordingStarted !== undefined) {
+        recorder.addEventListener('start', onRecordingStarted);
+      }
 
-    recorder.start(1000); // Start recording 1 second of video into each Blob
+      if (onRecordedDataReceived !== undefined) {
+        recorder.addEventListener('dataavailable', (event) => {
+          const isLastData = isStoppingRef.current;
+          onRecordedDataReceived(event.data, isLastData);
+        });
+      }
 
-    isStoppingRef.current = false;
-    mediaRecorderRef.current = recorder;
-    setIsRecording(true);
-  }, [
-    onRecordedDataReceived,
-    onRecordingStarted,
-    onRecordingStopped,
-    stream,
-    supportedMimeType?.name
-  ]);
+      if (onRecordingStopped !== undefined) {
+        recorder.addEventListener('stop', onRecordingStopped);
+      }
+
+      recorder.start(1000); // Start recording 1 second of video into each Blob
+
+      isStoppingRef.current = false;
+      mediaRecorderRef.current = recorder;
+      setIsRecording(true);
+    },
+    [
+      onRecordedDataReceived,
+      onRecordingStarted,
+      onRecordingStopped,
+      stream,
+      supportedMimeType?.name
+    ]
+  );
 
   const onStopRecording = useCallback(() => {
     if (mediaRecorderRef.current !== null) {
