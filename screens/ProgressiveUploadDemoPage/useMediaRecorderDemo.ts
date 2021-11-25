@@ -2,22 +2,20 @@ import { useCallback, useEffect, useState } from 'react';
 import { useScreencastRecorder } from '../../hooks/useScreencastRecorder';
 import { useWebcamRecorder } from '../../hooks/useWebcamRecorder';
 
-/**
- * We need a file size big enough to be able to compare the speed of
- * each upload strategy in this demo.
- * Thus, we force the webcam recording to a fixed duration.
- */
-const recordingDurationMs = 60 * 1000; // 60 seconds
-
 export type UseMediaRecorderDemoArgs = {
+  readonly recordingDurationMs: number;
   readonly onRecordingStarted?: () => void;
   readonly onRecordingStopped?: () => void;
   readonly onRecordedDataReceived?: (data: Blob, isLastData: boolean) => void;
 };
 
 export const useMediaRecorderDemo = (args: UseMediaRecorderDemoArgs) => {
-  const { onRecordingStarted, onRecordedDataReceived, onRecordingStopped } =
-    args;
+  const {
+    recordingDurationMs,
+    onRecordingStarted,
+    onRecordedDataReceived,
+    onRecordingStopped
+  } = args;
 
   const urlParams =
     typeof window !== 'undefined' &&
@@ -70,7 +68,7 @@ export const useMediaRecorderDemo = (args: UseMediaRecorderDemoArgs) => {
       setRecordingTimeLeftMs((prev) => prev - 1000);
     }, 1000);
     return () => window.clearInterval(intervalId);
-  }, [isRecording]);
+  }, [isRecording, recordingDurationMs]);
 
   // Stop recording when the countdown reaches 0
   useEffect(() => {

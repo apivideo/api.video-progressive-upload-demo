@@ -4,12 +4,8 @@ import Head from 'next/head';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
-import {
-  ApiVideoSvg,
-  IconCameraRecorderSvg,
-  IconPlaySvg
-} from '../../assets/svg';
-import { Button } from '../../components/Button';
+import { ApiVideoSvg, IconCameraRecorderSvg } from '../../assets/svg';
+import { RecordButton } from './RecordButton';
 import {
   useMediaRecorderDemo,
   UseMediaRecorderDemoArgs
@@ -18,6 +14,13 @@ import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
 
 const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
+
+/**
+ * We need a file size big enough to be able to compare the speed of
+ * each upload strategy in this demo.
+ * Thus, we force the webcam recording to a fixed duration.
+ */
+const recordingDurationMs = 60 * 1000; // 60 seconds
 
 export const ProgressiveUploadDemoPage: NextPage = () => {
   const {
@@ -73,12 +76,18 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     [pguUploadLastPart, pguUploadPart, sduBufferize, sduUploadAll]
   );
 
-  const { videoRef, isStreamInitialized, isRecording, onStartRecording } =
-    useMediaRecorderDemo({
-      onRecordingStarted,
-      onRecordingStopped,
-      onRecordedDataReceived
-    });
+  const {
+    videoRef,
+    isStreamInitialized,
+    isRecording,
+    recordingTimeLeftMs,
+    onStartRecording
+  } = useMediaRecorderDemo({
+    recordingDurationMs,
+    onRecordingStarted,
+    onRecordingStopped,
+    onRecordedDataReceived
+  });
 
   const isUploading = sduIsUploading || pguIsUploading;
 
@@ -98,7 +107,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           )}
         >
           <div className="md:col-span-3 col-span-8">
-            <ApiVideoSvg className="pb-6" />
+            <ApiVideoSvg className="pb-6 box-content" />
             <h1 className="text-3xl-2 font-black py-6">
               Record &amp; upload simultaneously with Progressive Upload
             </h1>
@@ -106,13 +115,12 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               Save time and instantly share your recorded video. Try it below
               for yourself!
             </h2>
-            <Button
-              disabled={isRecording || isUploading}
+            <RecordButton
+              recordingTimeLeftMs={recordingTimeLeftMs}
+              isRecording={isRecording}
+              isUploading={isUploading}
               onClick={onStartRecording}
-            >
-              <IconPlaySvg className="inline-block pr-2 w-auto fill-current text-white" />
-              Start recording
-            </Button>
+            />
           </div>
           <div className="md:col-span-5 col-span-8">
             <div

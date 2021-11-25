@@ -22,6 +22,10 @@ module.exports = {
       botticelli: '#d9e1ec'
     },
 
+    stroke: (theme) => ({
+      fiord: theme('colors.fiord')
+    }),
+
     fontFamily: {
       body: ['Inter', 'sans-serif']
     },
