@@ -158,7 +158,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           </div>
         </div>
 
-        <div className="mx-auto max-w-screen-xl px-8">
+        <div className="mx-auto max-w-screen-xl p-8 bg-firefly-light rounded-none md:rounded-3xl">
           <div className="pb-4">
             <h1>Standard Upload</h1>
             <p>File size: {prettyBytes(sduBufferSizeBytes)}</p>
