@@ -2,6 +2,7 @@ import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { memo, useMemo } from 'react';
 import { IconApiVideoSvg } from '../../assets/svg';
+import { SpeedTag } from './SpeedTag';
 import { TimelineDot } from './TimelineDot';
 import { TimelineProgressBar } from './TimelineProgressBar';
 
@@ -36,8 +37,10 @@ export type UploadTimelineProps = {
   readonly recordingDurationMs: number;
   readonly isRecording: boolean;
   readonly isUploading: boolean;
+  readonly timesFaster: number | undefined;
   readonly variant: 'gradient' | 'uni';
   readonly withHeader?: boolean;
+  readonly shouldShowSpeedTag?: boolean;
 };
 
 export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
@@ -50,6 +53,8 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
       videoLink,
       totalDurationMs,
       recordingDurationMs,
+      timesFaster,
+      shouldShowSpeedTag,
       isRecording,
       isUploading
     } = props;
@@ -129,13 +134,18 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           </div>
 
           {/* Elapsed time */}
-          <div>
-            {shouldShowElapsedTime &&
-              elapsedTimeMs > 0 &&
-              prettyMilliseconds(elapsedTimeMs, {
-                keepDecimalsOnWholeSeconds: true,
-                secondsDecimalDigits: 2
-              })}
+          <div className="justify-self-end text-right">
+            <span className="font-bold">
+              {shouldShowElapsedTime &&
+                elapsedTimeMs > 0 &&
+                prettyMilliseconds(elapsedTimeMs, {
+                  keepDecimalsOnWholeSeconds: true,
+                  secondsDecimalDigits: 2
+                })}
+            </span>
+            {timesFaster !== undefined && shouldShowSpeedTag ? (
+              <SpeedTag variant={variant} timesFaster={timesFaster} />
+            ) : null}
           </div>
 
           {/* Progress bar */}

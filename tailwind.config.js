@@ -23,7 +23,8 @@ module.exports = {
 
       seance: '#7c15b3',
       cranberry: '#dd5579',
-      bittersweet: '#ff6b65'
+      bittersweet: '#ff6b65',
+      cerise: '#dd3b83'
     },
 
     stroke: (theme) => ({

@@ -94,6 +94,15 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
 
   const isUploading = sduIsUploading || pguIsUploading;
 
+  const pguTimesFaster =
+    !isUploading && pguVideoLink !== ''
+      ? sduDurationMs / pguDurationMs
+      : undefined;
+  const sduTimesFaster =
+    !isUploading && sduVideoLink !== ''
+      ? pguDurationMs / sduDurationMs
+      : undefined;
+
   return (
     <div>
       <Head>
@@ -174,6 +183,10 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
                 totalDurationMs={pguDurationMs}
                 videoLink={pguVideoLink}
                 isUploading={pguIsUploading}
+                timesFaster={pguTimesFaster}
+                shouldShowSpeedTag={
+                  pguTimesFaster !== undefined && pguTimesFaster > 1
+                }
               />
             </div>
             <UploadTimeline
@@ -185,6 +198,10 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               totalDurationMs={sduDurationMs}
               videoLink={sduVideoLink}
               isUploading={sduIsUploading}
+              timesFaster={sduTimesFaster}
+              shouldShowSpeedTag={
+                sduTimesFaster !== undefined && sduTimesFaster < 1
+              }
             />
           </div>
         </div>
