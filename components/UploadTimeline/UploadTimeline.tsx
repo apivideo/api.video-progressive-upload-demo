@@ -101,9 +101,11 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
 
           {/* File size */}
           <div>
-            <span className="absolute transform -translate-x-1/2">
-              {prettyBytes(fileSizeBytes)}
-            </span>
+            {fileSizeBytes > 0 && (
+              <span className="absolute transform -translate-x-1/2">
+                {prettyBytes(fileSizeBytes)}
+              </span>
+            )}
             <TimelineDot
               className="transform -translate-x-1/2 -bottom-2"
               state={
