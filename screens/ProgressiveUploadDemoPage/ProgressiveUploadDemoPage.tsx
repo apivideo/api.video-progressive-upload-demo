@@ -185,6 +185,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
                 <video
                   className="object-cover rounded-3xl"
                   autoPlay
+                  muted
                   ref={videoRef}
                 />
               ) : (
