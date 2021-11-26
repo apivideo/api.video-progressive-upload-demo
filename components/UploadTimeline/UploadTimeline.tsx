@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { IconApiVideoSvg } from '../../assets/svg';
 import { TimelineDot } from './TimelineDot';
 import { TimelineProgressBar } from './TimelineProgressBar';
 
@@ -23,7 +24,10 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
         {withHeader && (
           // `grid-cols-5` needs to match `colCount`
           <div className="grid grid-cols-5 justify-items-center pb-8">
-            <div></div>
+            <div className="font-bold justify-self-start">
+              <IconApiVideoSvg className="inline-flex pr-1.5" />
+              api.video
+            </div>
             <div>File size</div>
             <div>Upload</div>
             <div>Video link</div>
@@ -33,21 +37,33 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
         {/* `grid-cols-5` needs to match `colCount` */}
         <div className="grid grid-cols-5 justify-items-center relative">
           {/* Title */}
-          <div className="font-bold justify-self-start">{title}</div>
+          <div className="font-bold justify-self-start pb-4">{title}</div>
 
           {/* File size */}
           <div>
-            <TimelineDot state="idle" variant={variant} />
+            <TimelineDot
+              className="transform -translate-x-1/2 -bottom-2"
+              state="idle"
+              variant={variant}
+            />
           </div>
 
           {/* Upload */}
           <div>
-            <TimelineDot state="idle" variant={variant} />
+            <TimelineDot
+              className="transform -translate-x-1/2 -bottom-2"
+              state="idle"
+              variant={variant}
+            />
           </div>
 
           {/* Video link */}
           <div>
-            <TimelineDot state="idle" variant={variant} />
+            <TimelineDot
+              className="transform -translate-x-1/2 -bottom-2"
+              state="idle"
+              variant={variant}
+            />
           </div>
 
           {/* Elapsed time */}
