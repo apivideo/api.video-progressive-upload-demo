@@ -109,8 +109,11 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
             <TimelineDot
               className="transform -translate-x-1/2 -bottom-2"
               state={
-                isRecording || isUploading || videoLink !== '' ? 'done' : 'idle'
+                isRecording || isUploading || videoLink !== ''
+                  ? 'active'
+                  : 'idle'
               }
+              isDone={isUploading || videoLink !== ''}
               variant={variant}
             />
           </div>
@@ -119,7 +122,8 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           <div>
             <TimelineDot
               className="transform -translate-x-1/2 -bottom-2"
-              state={isUploading || videoLink !== '' ? 'done' : 'idle'}
+              state={isUploading || videoLink !== '' ? 'active' : 'idle'}
+              isDone={videoLink !== ''}
               variant={variant}
             />
           </div>
@@ -128,7 +132,8 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           <div>
             <TimelineDot
               className="transform -translate-x-1/2 -bottom-2"
-              state={videoLink !== '' ? 'done' : 'idle'}
+              state={videoLink !== '' ? 'active' : 'idle'}
+              isDone={videoLink !== ''}
               variant={variant}
             />
           </div>

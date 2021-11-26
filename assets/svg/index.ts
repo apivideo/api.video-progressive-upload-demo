@@ -1,5 +1,6 @@
 export { default as IconApiVideoSvg } from './icon-apivideo.svg';
 export { default as IconCameraRecorderSvg } from './icon-camerarecorder.svg';
+export { default as IconCheck } from './icon-check.svg';
 export { default as IconCheckRounded } from './icon-checkrounded.svg';
 export { default as IconGithubSvg } from './icon-github.svg';
 export { default as IconPlaySvg } from './icon-play.svg';
