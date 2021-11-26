@@ -35,7 +35,6 @@ export type UploadTimelineProps = {
   readonly fileSizeBytes: number;
   readonly videoLink: string;
   readonly totalDurationMs: number;
-  readonly recordingDurationMs: number;
   readonly isRecording: boolean;
   readonly isUploading: boolean;
   readonly timesFaster: number | undefined;
@@ -53,7 +52,6 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
       fileSizeBytes,
       videoLink,
       totalDurationMs,
-      recordingDurationMs,
       timesFaster,
       shouldShowSpeedTag,
       isRecording,
@@ -79,7 +77,6 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
     // Show elapsed time only when recording is finished.
     // Also subtract recording duration from total time.
     const shouldShowElapsedTime = totalDurationMs > 0 && !isRecording;
-    const elapsedTimeMs = totalDurationMs - recordingDurationMs;
 
     return (
       <>
@@ -156,8 +153,7 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           <div className="justify-self-end text-right">
             <span className="font-bold">
               {shouldShowElapsedTime &&
-                elapsedTimeMs > 0 &&
-                prettyMilliseconds(elapsedTimeMs, {
+                prettyMilliseconds(totalDurationMs, {
                   keepDecimalsOnWholeSeconds: true,
                   secondsDecimalDigits: 2
                 })}

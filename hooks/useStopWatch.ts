@@ -1,12 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export const useStopWatch = () => {
   const [durationMs, setDurationMs] = useState(0);
   const [isStarted, setIsStarted] = useState(false);
 
+  // We also expose a ref just in case the consumer needs the value without any re-render
+  const durationMsRef = useRef(0);
+
   const start = useCallback((withReset?: boolean) => {
     if (withReset) {
       setDurationMs(0);
+      durationMsRef.current = 0;
     }
     setIsStarted(true);
   }, []);
@@ -18,8 +22,12 @@ export const useStopWatch = () => {
 
     if (isStarted) {
       intervalId = window.setInterval(() => {
-        setDurationMs((prev) => prev + 50);
-      }, 50);
+        setDurationMs((prev) => {
+          const newDurationMs = prev + 10;
+          durationMsRef.current = newDurationMs;
+          return newDurationMs;
+        });
+      }, 10);
     } else {
       window.clearInterval(intervalId);
     }
@@ -28,6 +36,7 @@ export const useStopWatch = () => {
 
   return {
     durationMs,
+    durationMsRef,
     start,
     stop
   };

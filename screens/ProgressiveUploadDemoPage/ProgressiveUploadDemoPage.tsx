@@ -1,13 +1,14 @@
 import classNames from 'classnames';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ApiVideoSvg,
   IconCameraRecorderSvg,
   IconGithubSvg
 } from '../../assets/svg';
 import { UploadTimeline } from '../../components/UploadTimeline';
+import { useStopWatch } from '../../hooks/useStopWatch';
 import { RecordButton } from './RecordButton';
 import {
   useMediaRecorderDemo,
@@ -26,18 +27,38 @@ const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
 const recordingDurationMs = 60 * 1000; // 60 seconds
 
 export const ProgressiveUploadDemoPage: NextPage = () => {
+  // Elapsed time since the standard upload starts
+  const [sduDurationMs, setSduDurationMs] = useState(0);
+  const [pguDurationMs, setPguDurationMs] = useState(0);
+
   const {
-    durationMs: sduDurationMs,
+    start: swStart,
+    stop: swStop,
+    durationMs,
+    durationMsRef
+  } = useStopWatch();
+
+  const onStandardUploadFinished = useCallback(() => {
+    setSduDurationMs(durationMsRef.current);
+  }, [durationMsRef]);
+
+  const onProgressiveUploadFinished = useCallback(() => {
+    setPguDurationMs(durationMsRef.current);
+  }, [durationMsRef]);
+
+  const {
     bufferSizeBytes: sduBufferSizeBytes,
     videoLink: sduVideoLink,
     isUploading: sduIsUploading,
     prepare: sduPrepare,
     bufferize: sduBufferize,
     uploadAll: sduUploadAll
-  } = useStandardUploaderDemo({ delegatedToken });
+  } = useStandardUploaderDemo({
+    delegatedToken,
+    onUploadFinished: onStandardUploadFinished
+  });
 
   const {
-    durationMs: pguDurationMs,
     bufferSizeBytes: pguBufferSizeBytes,
     videoLink: pguVideoLink,
     isUploading: pguIsUploading,
@@ -45,13 +66,16 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
     uploadPart: pguUploadPart,
     uploadLastPart: pguUploadLastPart
   } = useProgressiveUploaderDemo({
-    delegatedToken
+    delegatedToken,
+    onUploadFinished: onProgressiveUploadFinished
   });
 
   const onRecordingStarted = useCallback(() => {
     console.log('Recording started');
     sduPrepare();
     pguPrepare();
+    setSduDurationMs(0);
+    setPguDurationMs(0);
   }, [pguPrepare, sduPrepare]);
 
   const onRecordingStopped = useCallback(() => {
@@ -66,6 +90,8 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
       sduBufferize(data);
 
       if (isLast) {
+        swStart(true);
+
         console.log('Standard upload all started');
         sduUploadAll();
 
@@ -76,7 +102,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
         pguUploadPart(data);
       }
     },
-    [pguUploadLastPart, pguUploadPart, sduBufferize, sduUploadAll]
+    [pguUploadLastPart, pguUploadPart, sduBufferize, sduUploadAll, swStart]
   );
 
   const {
@@ -95,13 +121,25 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
   const isUploading = sduIsUploading || pguIsUploading;
 
   const pguTimesFaster =
-    !isUploading && pguVideoLink !== ''
+    !isUploading &&
+    pguVideoLink !== '' &&
+    sduDurationMs !== 0 &&
+    pguDurationMs !== 0
       ? sduDurationMs / pguDurationMs
       : undefined;
   const sduTimesFaster =
-    !isUploading && sduVideoLink !== ''
+    !isUploading &&
+    sduVideoLink !== '' &&
+    sduDurationMs !== 0 &&
+    pguDurationMs !== 0
       ? pguDurationMs / sduDurationMs
       : undefined;
+
+  useEffect(() => {
+    if (!isUploading) {
+      swStop();
+    }
+  }, [isUploading, swStop]);
 
   return (
     <div>
@@ -178,9 +216,8 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
                 title="Progressive upload"
                 variant="gradient"
                 isRecording={isRecording}
-                recordingDurationMs={recordingDurationMs}
                 fileSizeBytes={pguBufferSizeBytes}
-                totalDurationMs={pguDurationMs}
+                totalDurationMs={pguDurationMs || durationMs}
                 videoLink={pguVideoLink}
                 isUploading={pguIsUploading}
                 timesFaster={pguTimesFaster}
@@ -193,9 +230,8 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               title="Regular upload"
               variant="uni"
               isRecording={isRecording}
-              recordingDurationMs={recordingDurationMs}
               fileSizeBytes={sduBufferSizeBytes}
-              totalDurationMs={sduDurationMs}
+              totalDurationMs={sduDurationMs || durationMs}
               videoLink={sduVideoLink}
               isUploading={sduIsUploading}
               timesFaster={sduTimesFaster}

@@ -1,31 +1,24 @@
 import { VideoUploadResponse } from '@api.video/video-uploader/dist/src/common';
 import { useCallback, useState } from 'react';
 import { useStandardUploader } from '../../hooks/useStandardUploader';
-import { useStopWatch } from '../../hooks/useStopWatch';
 
 type UseStandardUploaderDemoArgs = {
   readonly delegatedToken: string;
+  readonly onUploadFinished?: () => void;
 };
 
 export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
-  const { delegatedToken } = args;
-
-  const {
-    start: swStart,
-    stop: swStop,
-    durationMs: swDurationMs
-  } = useStopWatch();
+  const { delegatedToken, onUploadFinished } = args;
 
   const [bufferSizeBytes, setBufferSizeBytes] = useState(0);
   const [videoLink, setVideoLink] = useState<string>('');
   const [isUploading, setIsUploading] = useState(false);
 
   const onStandardUploadInit = useCallback(() => {
-    swStart(true);
     setIsUploading(false);
     setBufferSizeBytes(0);
     setVideoLink('');
-  }, [swStart]);
+  }, []);
 
   const onStandardUploadStarted = useCallback(() => {
     setIsUploading(true);
@@ -34,20 +27,20 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
   const onStandardUploadSuccess = useCallback(
     (video: VideoUploadResponse) => {
       console.log('Standard upload success', video);
-      swStop();
+      onUploadFinished?.();
       setIsUploading(false);
       setVideoLink(video.assets.player);
     },
-    [swStop]
+    [onUploadFinished]
   );
 
   const onStandardUploadError = useCallback(
     (error: Error) => {
       console.log('Standard upload error', error);
-      swStop();
+      onUploadFinished?.();
       setIsUploading(false);
     },
-    [swStop]
+    [onUploadFinished]
   );
 
   const onBufferBytesAdded = useCallback(
@@ -67,7 +60,6 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
   return {
     ...standardUploader,
     bufferSizeBytes,
-    durationMs: swDurationMs,
     videoLink,
     isUploading
   };
