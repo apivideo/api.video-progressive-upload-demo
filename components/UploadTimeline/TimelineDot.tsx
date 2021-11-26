@@ -12,6 +12,7 @@ export type TimelineDotProps = {
 export const TimelineDot: React.FC<TimelineDotProps> = memo(
   function TimelineDot(props) {
     const { className, state, variant, isDone } = props;
+    const isInProgress = state === 'active' && !isDone;
     return (
       <div className={classNames('absolute w-5 h-5', className)}>
         <div
@@ -40,6 +41,13 @@ export const TimelineDot: React.FC<TimelineDotProps> = memo(
             // Variant 'uni'
             {
               'bg-lavenderGray': variant === 'uni'
+            },
+            // Pulse animation
+            {
+              'animate-pulse-shadow-cranberry':
+                isInProgress && variant === 'gradient',
+              'animate-pulse-shadow-lavenderGray':
+                isInProgress && variant === 'uni'
             }
           )}
         />

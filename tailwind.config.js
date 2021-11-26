@@ -8,7 +8,43 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        // https://www.florin-pop.com/blog/2019/03/css-pulse-effect/
+        'pulse-shadow-cranberry': {
+          '0%': {
+            transform: 'scale(0.95)',
+            'box-shadow': '0 0 0 0 rgba(221, 85, 121, 0.7)'
+          },
+          '70%': {
+            transform: 'scale(1)',
+            'box-shadow': '0 0 0 10px rgba(221, 85, 121, 0)'
+          },
+          '100%': {
+            transform: 'scale(0.95)',
+            'box-shadow': '0 0 0 0 rgba(221, 85, 121, 0)'
+          }
+        },
+        'pulse-shadow-lavenderGray': {
+          '0%': {
+            transform: 'scale(0.95)',
+            'box-shadow': '0 0 0 0 rgba(195, 184, 216, 0.7)'
+          },
+          '70%': {
+            transform: 'scale(1)',
+            'box-shadow': '0 0 0 10px rgba(195, 184, 216, 0)'
+          },
+          '100%': {
+            transform: 'scale(0.95)',
+            'box-shadow': '0 0 0 0 rgba(195, 184, 216, 0)'
+          }
+        }
+      },
+      animation: {
+        'pulse-shadow-cranberry': 'pulse-shadow-cranberry 2s infinite',
+        'pulse-shadow-lavenderGray': 'pulse-shadow-lavenderGray 2s infinite'
+      }
+    },
 
     // https://chir.ag/projects/name-that-color/
     colors: {
