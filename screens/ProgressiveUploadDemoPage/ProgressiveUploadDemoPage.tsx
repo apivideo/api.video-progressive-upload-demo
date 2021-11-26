@@ -23,7 +23,7 @@ const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
  * each upload strategy in this demo.
  * Thus, we force the webcam recording to a fixed duration.
  */
-const recordingDurationMs = 5 * 1000; // 60 seconds
+const recordingDurationMs = 60 * 1000; // 60 seconds
 
 export const ProgressiveUploadDemoPage: NextPage = () => {
   const {
@@ -169,8 +169,9 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
                 title="Progressive upload"
                 variant="gradient"
                 isRecording={isRecording}
+                recordingDurationMs={recordingDurationMs}
                 fileSizeBytes={pguBufferSizeBytes}
-                durationMs={pguDurationMs}
+                totalDurationMs={pguDurationMs}
                 videoLink={pguVideoLink}
                 isUploading={pguIsUploading}
               />
@@ -179,8 +180,9 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               title="Regular upload"
               variant="uni"
               isRecording={isRecording}
+              recordingDurationMs={recordingDurationMs}
               fileSizeBytes={sduBufferSizeBytes}
-              durationMs={sduDurationMs}
+              totalDurationMs={sduDurationMs}
               videoLink={sduVideoLink}
               isUploading={sduIsUploading}
             />

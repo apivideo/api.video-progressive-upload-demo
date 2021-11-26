@@ -6,6 +6,7 @@ import { useCallback, useRef } from 'react';
 type UseProgressiveUploaderArgs = {
   readonly delegatedToken: string;
   readonly onUploadInit?: () => void;
+  readonly onUploadStarted?: () => void;
   readonly onUploadSuccess?: (video: VideoUploadResponse) => void;
   readonly onUploadError?: (error: Error) => void;
   readonly onBufferBytesAdded?: (bytes: number) => void;
@@ -16,6 +17,7 @@ export const useProgressiveUploader = (args: UseProgressiveUploaderArgs) => {
   const {
     delegatedToken,
     onUploadInit,
+    onUploadStarted,
     onUploadSuccess,
     onUploadError,
     onBufferBytesAdded,
@@ -26,20 +28,25 @@ export const useProgressiveUploader = (args: UseProgressiveUploaderArgs) => {
   // We need a queue to preserve chunks upload order, especially for slow connections.
   const partsToUploadQueueRef = useRef(new PQueue({ concurrency: 1 }));
 
+  const isUploadingFirstPartRef = useRef(true);
+
   const prepare = useCallback(() => {
     onUploadInit?.();
+    isUploadingFirstPartRef.current = true;
     partsToUploadQueueRef.current.clear();
     progressiveUploaderRef.current = new ProgressiveUploader({
       uploadToken: delegatedToken
     });
-    if (onBufferBytesRemoved !== undefined) {
-      progressiveUploaderRef.current.onProgress((event) => {
-        if (event.uploadedBytes >= event.totalBytes) {
-          onBufferBytesRemoved(event.totalBytes);
-        }
-      });
-    }
-  }, [delegatedToken, onBufferBytesRemoved, onUploadInit]);
+    progressiveUploaderRef.current.onProgress((event) => {
+      if (event.uploadedBytes >= event.totalBytes) {
+        onBufferBytesRemoved?.(event.totalBytes);
+      }
+      if (isUploadingFirstPartRef.current) {
+        onUploadStarted?.();
+        isUploadingFirstPartRef.current = false;
+      }
+    });
+  }, [delegatedToken, onBufferBytesRemoved, onUploadInit, onUploadStarted]);
 
   const uploadPart = useCallback(
     async (data: Blob) => {

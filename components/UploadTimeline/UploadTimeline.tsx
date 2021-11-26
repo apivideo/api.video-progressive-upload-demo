@@ -32,7 +32,8 @@ export type UploadTimelineProps = {
   readonly title: React.ReactNode;
   readonly fileSizeBytes: number;
   readonly videoLink: string;
-  readonly durationMs: number;
+  readonly totalDurationMs: number;
+  readonly recordingDurationMs: number;
   readonly isRecording: boolean;
   readonly isUploading: boolean;
   readonly variant: 'gradient' | 'uni';
@@ -47,7 +48,8 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
       withHeader,
       fileSizeBytes,
       videoLink,
-      durationMs,
+      totalDurationMs,
+      recordingDurationMs,
       isRecording,
       isUploading
     } = props;
@@ -62,8 +64,16 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
       if (progressBarIndex === undefined) {
         return;
       }
+      if (progressBarIndex === colCount) {
+        return 100;
+      }
       return (progressBarIndex * 100) / colCount - 100 / colCount / 2;
     }, [progressBarIndex]);
+
+    // Show elapsed time only when recording is finished.
+    // Also subtract recording duration from total time.
+    const shouldShowElapsedTime = totalDurationMs > 0 && !isRecording;
+    const elapsedTimeMs = totalDurationMs - recordingDurationMs;
 
     return (
       <>
@@ -119,7 +129,14 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           </div>
 
           {/* Elapsed time */}
-          <div>{prettyMilliseconds(durationMs)}</div>
+          <div>
+            {shouldShowElapsedTime &&
+              elapsedTimeMs > 0 &&
+              prettyMilliseconds(elapsedTimeMs, {
+                keepDecimalsOnWholeSeconds: true,
+                secondsDecimalDigits: 2
+              })}
+          </div>
 
           {/* Progress bar */}
           {/* `col-span-5` needs to match `colCount` */}

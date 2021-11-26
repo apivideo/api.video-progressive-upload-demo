@@ -18,8 +18,8 @@ export const useStopWatch = () => {
 
     if (isStarted) {
       intervalId = window.setInterval(() => {
-        setDurationMs((prev) => prev + 100);
-      }, 100);
+        setDurationMs((prev) => prev + 50);
+      }, 50);
     } else {
       window.clearInterval(intervalId);
     }
