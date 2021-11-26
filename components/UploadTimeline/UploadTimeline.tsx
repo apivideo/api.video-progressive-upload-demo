@@ -1,22 +1,69 @@
-import React, { memo } from 'react';
+import prettyBytes from 'pretty-bytes';
+import prettyMilliseconds from 'pretty-ms';
+import React, { memo, useMemo } from 'react';
 import { IconApiVideoSvg } from '../../assets/svg';
 import { TimelineDot } from './TimelineDot';
 import { TimelineProgressBar } from './TimelineProgressBar';
 
+/**
+ * Number of columns in the timeline grid
+ * 1 Title / 2 Filesize / 3 Upload / 4 Link / 5 Elapsed time
+ */
+const colCount = 5;
+
+function getProgressBarColIndexFromState(
+  isRecording: boolean,
+  isUploading: boolean,
+  videoLink: string
+) {
+  if (videoLink !== '') {
+    return 5;
+  }
+  if (isUploading) {
+    return 3;
+  }
+  if (isRecording) {
+    return 2;
+  }
+  return undefined;
+}
+
 export type UploadTimelineProps = {
-  title: React.ReactNode;
-  // currentStep: string;
-  // fileSizeBytes: number;
-  // videoLink: string | undefined;
-  // durationMs: number;
-  variant: 'gradient' | 'uni';
-  withHeader?: boolean;
+  readonly title: React.ReactNode;
+  readonly fileSizeBytes: number;
+  readonly videoLink: string;
+  readonly durationMs: number;
+  readonly isRecording: boolean;
+  readonly isUploading: boolean;
+  readonly variant: 'gradient' | 'uni';
+  readonly withHeader?: boolean;
 };
 
 export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
   function UploadTimeline(props) {
-    // const { label, currentStep, durationMs, videoLink } = props;
-    const { title, variant, withHeader } = props;
+    const {
+      title,
+      variant,
+      withHeader,
+      fileSizeBytes,
+      videoLink,
+      durationMs,
+      isRecording,
+      isUploading
+    } = props;
+
+    const progressBarIndex = useMemo(
+      () =>
+        getProgressBarColIndexFromState(isRecording, isUploading, videoLink),
+      [isRecording, isUploading, videoLink]
+    );
+
+    const progressBarPercentageWidth = useMemo(() => {
+      if (progressBarIndex === undefined) {
+        return;
+      }
+      return (progressBarIndex * 100) / colCount - 100 / colCount / 2;
+    }, [progressBarIndex]);
 
     return (
       <>
@@ -41,9 +88,14 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
 
           {/* File size */}
           <div>
+            <span className="absolute transform -translate-x-1/2">
+              {prettyBytes(fileSizeBytes)}
+            </span>
             <TimelineDot
               className="transform -translate-x-1/2 -bottom-2"
-              state="idle"
+              state={
+                isRecording || isUploading || videoLink !== '' ? 'done' : 'idle'
+              }
               variant={variant}
             />
           </div>
@@ -52,7 +104,7 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           <div>
             <TimelineDot
               className="transform -translate-x-1/2 -bottom-2"
-              state="idle"
+              state={isUploading || videoLink !== '' ? 'done' : 'idle'}
               variant={variant}
             />
           </div>
@@ -61,18 +113,21 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           <div>
             <TimelineDot
               className="transform -translate-x-1/2 -bottom-2"
-              state="idle"
+              state={videoLink !== '' ? 'done' : 'idle'}
               variant={variant}
             />
           </div>
 
           {/* Elapsed time */}
-          <div></div>
+          <div>{prettyMilliseconds(durationMs)}</div>
 
           {/* Progress bar */}
           {/* `col-span-5` needs to match `colCount` */}
           <div className="col-span-5 justify-self-stretch pt-1.5">
-            <TimelineProgressBar variant={variant} widthPercent={undefined} />
+            <TimelineProgressBar
+              variant={variant}
+              widthPercent={progressBarPercentageWidth}
+            />
           </div>
         </div>
       </>

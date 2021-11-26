@@ -1,8 +1,6 @@
 import classNames from 'classnames';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import prettyBytes from 'pretty-bytes';
-import prettyMilliseconds from 'pretty-ms';
 import React, { useCallback } from 'react';
 import {
   ApiVideoSvg,
@@ -25,7 +23,7 @@ const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
  * each upload strategy in this demo.
  * Thus, we force the webcam recording to a fixed duration.
  */
-const recordingDurationMs = 60 * 1000; // 60 seconds
+const recordingDurationMs = 5 * 1000; // 60 seconds
 
 export const ProgressiveUploadDemoPage: NextPage = () => {
   const {
@@ -167,50 +165,25 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           <div className="pb-4">
             <div className="pb-12">
               <UploadTimeline
-                title="Progressive upload"
                 withHeader
+                title="Progressive upload"
                 variant="gradient"
+                isRecording={isRecording}
+                fileSizeBytes={pguBufferSizeBytes}
+                durationMs={pguDurationMs}
+                videoLink={pguVideoLink}
+                isUploading={pguIsUploading}
               />
             </div>
-            <UploadTimeline title="Regular upload" variant="uni" />
-
-            <br />
-
-            <h1>Standard Upload</h1>
-            <p>File size: {prettyBytes(sduBufferSizeBytes)}</p>
-            <p>
-              Duration:{' '}
-              {prettyMilliseconds(sduDurationMs, {
-                colonNotation: true
-              })}
-            </p>
-            <p>
-              Video Link:{' '}
-              {sduVideoLink !== '' ? (
-                <a href={sduVideoLink} target="_blank" rel="noreferrer">
-                  {sduVideoLink}
-                </a>
-              ) : null}
-            </p>
-          </div>
-
-          <div>
-            <h1>Progressive Upload</h1>
-            <p>File size: {prettyBytes(pguBufferSizeBytes)}</p>
-            <p>
-              Duration:{' '}
-              {prettyMilliseconds(pguDurationMs, {
-                colonNotation: true
-              })}
-            </p>
-            <p>
-              Video Link:{' '}
-              {pguVideoLink !== '' ? (
-                <a href={pguVideoLink} target="_blank" rel="noreferrer">
-                  {pguVideoLink}
-                </a>
-              ) : null}
-            </p>
+            <UploadTimeline
+              title="Regular upload"
+              variant="uni"
+              isRecording={isRecording}
+              fileSizeBytes={sduBufferSizeBytes}
+              durationMs={sduDurationMs}
+              videoLink={sduVideoLink}
+              isUploading={sduIsUploading}
+            />
           </div>
         </div>
       </main>

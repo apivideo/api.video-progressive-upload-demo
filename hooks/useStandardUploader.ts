@@ -5,6 +5,7 @@ import { useCallback, useRef } from 'react';
 type UseStandardUploaderArgs = {
   readonly delegatedToken: string;
   readonly onUploadInit?: () => void;
+  readonly onUploadStarted?: () => void;
   readonly onUploadSuccess?: (video: VideoUploadResponse) => void;
   readonly onUploadError?: (error: Error) => void;
   readonly onBufferBytesAdded?: (bytes: number) => void;
@@ -14,6 +15,7 @@ export const useStandardUploader = (args: UseStandardUploaderArgs) => {
   const {
     delegatedToken,
     onUploadInit,
+    onUploadStarted,
     onUploadSuccess,
     onUploadError,
     onBufferBytesAdded
@@ -41,11 +43,13 @@ export const useStandardUploader = (args: UseStandardUploaderArgs) => {
       uploadToken: delegatedToken
     });
 
+    onUploadStarted?.();
+
     // prettier-ignore
     uploader.upload()
       .then(onUploadSuccess)
       .catch(onUploadError);
-  }, [delegatedToken, onUploadError, onUploadSuccess]);
+  }, [delegatedToken, onUploadError, onUploadStarted, onUploadSuccess]);
 
   return {
     prepare,

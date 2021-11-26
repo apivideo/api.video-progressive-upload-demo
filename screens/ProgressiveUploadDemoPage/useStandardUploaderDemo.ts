@@ -22,10 +22,14 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
 
   const onStandardUploadInit = useCallback(() => {
     swStart(true);
-    setIsUploading(true);
+    setIsUploading(false);
     setBufferSizeBytes(0);
     setVideoLink('');
   }, [swStart]);
+
+  const onStandardUploadStarted = useCallback(() => {
+    setIsUploading(true);
+  }, []);
 
   const onStandardUploadSuccess = useCallback(
     (video: VideoUploadResponse) => {
@@ -54,6 +58,7 @@ export const useStandardUploaderDemo = (args: UseStandardUploaderDemoArgs) => {
   const standardUploader = useStandardUploader({
     delegatedToken,
     onUploadInit: onStandardUploadInit,
+    onUploadStarted: onStandardUploadStarted,
     onUploadSuccess: onStandardUploadSuccess,
     onUploadError: onStandardUploadError,
     onBufferBytesAdded
