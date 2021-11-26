@@ -19,7 +19,11 @@ module.exports = {
       'firefly-light': '#091429',
       periwinkle: '#d1ceff',
       outrageousOrange: '#fa5b30',
-      botticelli: '#d9e1ec'
+      botticelli: '#d9e1ec',
+
+      seance: '#7c15b3',
+      cranberry: '#dd5579',
+      bittersweet: '#ff6b65'
     },
 
     stroke: (theme) => ({
@@ -33,6 +37,10 @@ module.exports = {
     fontSize: {
       ...defaultTheme.fontSize,
       '3xl-2': '2em'
+    },
+
+    backgroundSize: {
+      'w-screen': '100vw'
     }
   },
   variants: {

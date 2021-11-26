@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import React, { memo } from 'react';
+import { TimelineDot } from './TimelineDot';
 
 /**
  * Number of columns in the timeline grid
@@ -39,17 +40,17 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
 
         {/* File size */}
         <div>
-          <div className="w-5 h-5 rounded-full bg-lavenderGray relative top-3/4"></div>
+          <TimelineDot state="idle" variant="gradient" />
         </div>
 
         {/* Upload */}
         <div>
-          <div className="w-5 h-5 rounded-full bg-lavenderGray relative top-3/4"></div>
+          <TimelineDot state="idle" variant="gradient" />
         </div>
 
         {/* Video link */}
         <div>
-          <div className="w-5 h-5 rounded-full bg-lavenderGray relative top-3/4"></div>
+          <TimelineDot state="idle" variant="gradient" />
         </div>
 
         {/* Elapsed time */}
@@ -59,7 +60,16 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
         <div
           className={classNames(`col-span-${colCount} justify-self-stretch`)}
         >
-          <div className="h-1.5 w-1/12 bg-lavenderGray rounded-md transition-all duration-200"></div>
+          <div
+            className={classNames(
+              'h-1.5 w-1/12 rounded-md ',
+              'transition-all duration-200',
+              // 'bg-lavenderGray',
+              'bg-w-screen bg-fixed',
+              'bg-gradient-to-r from-bittersweet via-cranberry to-seance'
+            )}
+            style={{ width: '100%' }}
+          />
         </div>
       </div>
     );

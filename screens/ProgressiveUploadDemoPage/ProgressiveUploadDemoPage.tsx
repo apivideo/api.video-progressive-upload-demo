@@ -9,6 +9,7 @@ import {
   IconCameraRecorderSvg,
   IconGithubSvg
 } from '../../assets/svg';
+import { UploadTimeline } from '../../components/UploadTimeline';
 import { RecordButton } from './RecordButton';
 import {
   useMediaRecorderDemo,
@@ -164,6 +165,10 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
 
         <div className="mx-auto max-w-screen-xl p-8 bg-firefly-light rounded-none md:rounded-3xl">
           <div className="pb-4">
+            <UploadTimeline title={<span>api.video</span>} />
+
+            <br />
+
             <h1>Standard Upload</h1>
             <p>File size: {prettyBytes(sduBufferSizeBytes)}</p>
             <p>
