@@ -7,14 +7,25 @@ export type TimelineDotProps = {
   readonly state: 'idle' | 'active';
   readonly isDone: boolean;
   readonly variant: 'gradient' | 'uni';
+  readonly size?: 'md' | 'xl';
+  readonly iconDone?: React.ReactNode;
 };
 
 export const TimelineDot: React.FC<TimelineDotProps> = memo(
   function TimelineDot(props) {
-    const { className, state, variant, isDone } = props;
+    const { className, state, variant, isDone, iconDone, size = 'md' } = props;
     const isInProgress = state === 'active' && !isDone;
     return (
-      <div className={classNames('absolute w-5 h-5', className)}>
+      <div
+        className={classNames(
+          'absolute transition-all',
+          {
+            'w-5 h-5': size === 'md',
+            'w-8 h-8': size === 'xl'
+          },
+          className
+        )}
+      >
         <div
           className={classNames(
             'absolute',
@@ -52,12 +63,16 @@ export const TimelineDot: React.FC<TimelineDotProps> = memo(
           )}
         />
         <div
-          className={classNames('absolute transform transition-transform', {
-            'scale-0': !isDone,
-            'scale-1': isDone
-          })}
+          className={classNames(
+            'absolute left-1/2 top-1/2',
+            'transform transition-transform -translate-x-1/2 -translate-y-1/2',
+            {
+              'scale-0': !isDone,
+              'scale-1': isDone
+            }
+          )}
         >
-          <IconCheck />
+          {iconDone !== undefined ? iconDone : <IconCheck />}
         </div>
       </div>
     );

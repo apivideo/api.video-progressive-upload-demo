@@ -1,7 +1,8 @@
+import classNames from 'classnames';
 import prettyBytes from 'pretty-bytes';
 import prettyMilliseconds from 'pretty-ms';
 import React, { memo, useMemo } from 'react';
-import { IconApiVideoSvg } from '../../assets/svg';
+import { IconApiVideoSvg, IconPlaySvg } from '../../assets/svg';
 import { SpeedTag } from './SpeedTag';
 import { TimelineDot } from './TimelineDot';
 import { TimelineProgressBar } from './TimelineProgressBar';
@@ -130,12 +131,25 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
 
           {/* Video link */}
           <div>
-            <TimelineDot
-              className="transform -translate-x-1/2 -bottom-2"
-              state={videoLink !== '' ? 'active' : 'idle'}
-              isDone={videoLink !== ''}
-              variant={variant}
-            />
+            <a
+              href={videoLink !== '' ? videoLink : undefined}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <TimelineDot
+                className={classNames('transform -translate-x-1/2', {
+                  '-bottom-2': videoLink === '',
+                  '-bottom-3': videoLink !== ''
+                })}
+                state={videoLink !== '' ? 'active' : 'idle'}
+                isDone={videoLink !== ''}
+                size={videoLink !== '' ? 'xl' : 'md'}
+                variant={variant}
+                iconDone={
+                  <IconPlaySvg className="text-white fill-current w-3.5 h-4" />
+                }
+              />
+            </a>
           </div>
 
           {/* Elapsed time */}
