@@ -31,7 +31,11 @@ export const TimelineDot: React.FC<TimelineDotProps> = memo(
             'absolute',
             'w-full h-full rounded-full',
             'transition-opacity',
-            'bg-fiord'
+            'bg-fiord',
+            {
+              'opacity-0': state === 'active',
+              'opacity-1': state === 'idle'
+            }
           )}
         />
         <div
