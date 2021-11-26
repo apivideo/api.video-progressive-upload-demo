@@ -10,11 +10,11 @@ export const TimelineDot: React.FC<TimelineDotProps> = memo(
   function TimelineDot(props) {
     const { state, variant } = props;
     return (
-      <div className="relative top-8">
+      <div className="relative top-8 w-5 h-5">
         <div
           className={classNames(
             'absolute',
-            'w-5 h-5 rounded-full',
+            'w-full h-full rounded-full',
             'transition-opacity',
             'bg-fiord'
           )}
@@ -22,7 +22,7 @@ export const TimelineDot: React.FC<TimelineDotProps> = memo(
         <div
           className={classNames(
             'absolute',
-            'w-5 h-5 rounded-full',
+            'w-full h-full rounded-full',
             'transition-opacity',
             {
               'opacity-0': state === 'idle',

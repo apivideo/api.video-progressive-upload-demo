@@ -165,7 +165,14 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
 
         <div className="mx-auto max-w-screen-xl p-8 bg-firefly-light rounded-none md:rounded-3xl">
           <div className="pb-4">
-            <UploadTimeline title={<span>api.video</span>} />
+            <div className="pb-8">
+              <UploadTimeline
+                title={<span>api.video</span>}
+                withHeader
+                variant="gradient"
+              />
+            </div>
+            <UploadTimeline title="Regular upload" variant="uni" />
 
             <br />
 
