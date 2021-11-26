@@ -1,13 +1,6 @@
-import classNames from 'classnames';
 import React, { memo } from 'react';
 import { TimelineDot } from './TimelineDot';
 import { TimelineProgressBar } from './TimelineProgressBar';
-
-/**
- * Number of columns in the timeline grid
- * Title / Filesize / Upload / Link / Elapsed time
- */
-const colCount = 5;
 
 export type UploadTimelineProps = {
   title: React.ReactNode;
@@ -28,11 +21,8 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
       <>
         {/* Header row */}
         {withHeader && (
-          <div
-            className={classNames(
-              `grid grid-cols-${colCount} justify-items-center pb-2`
-            )}
-          >
+          // `grid-cols-5` needs to match `colCount`
+          <div className="grid grid-cols-5 justify-items-center pb-8">
             <div></div>
             <div>File size</div>
             <div>Upload</div>
@@ -40,12 +30,8 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
             <div></div>
           </div>
         )}
-
-        <div
-          className={classNames(
-            `grid grid-cols-${colCount} h-16 justify-items-center`
-          )}
-        >
+        {/* `grid-cols-5` needs to match `colCount` */}
+        <div className="grid grid-cols-5 justify-items-center relative">
           {/* Title */}
           <div className="font-bold justify-self-start">{title}</div>
 
@@ -68,9 +54,8 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           <div></div>
 
           {/* Progress bar */}
-          <div
-            className={classNames(`col-span-${colCount} justify-self-stretch`)}
-          >
+          {/* `col-span-5` needs to match `colCount` */}
+          <div className="col-span-5 justify-self-stretch pt-1.5">
             <TimelineProgressBar variant={variant} widthPercent={undefined} />
           </div>
         </div>
