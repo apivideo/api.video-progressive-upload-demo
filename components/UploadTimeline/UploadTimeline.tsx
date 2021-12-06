@@ -137,7 +137,10 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
                 })}
             </span>
             {videoLink !== '' && shouldShowSpeedTag ? (
-              <SpeedTag variant={'gradient'} timesFaster={2} />
+              <SpeedTag
+                variant={'gradient'}
+                timesFaster={timesFaster && timesFaster > 1 ? timesFaster : 2}
+              />
             ) : null}
           </div>
 
