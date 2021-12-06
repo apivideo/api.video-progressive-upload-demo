@@ -22,10 +22,10 @@ function getProgressBarColIndexFromState(
     return 5;
   }
   if (isUploading) {
-    return 3;
+    return 4.25;
   }
   if (isRecording) {
-    return 2;
+    return 3;
   }
   return undefined;
 }
@@ -83,7 +83,7 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
         {/* Header row */}
         {withHeader && (
           // `grid-cols-5` needs to match `colCount`
-          <div className="grid grid-cols-5 justify-items-center pb-8">
+          <div className="grid grid-cols-4 justify-items-end pb-8">
             <div className="font-bold justify-self-start">
               <IconApiVideoSvg className="inline-flex pr-1.5" />
               api.video
@@ -91,23 +91,22 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
             <div>File size</div>
             <div>Upload</div>
             <div>Video link</div>
-            <div></div>
           </div>
         )}
         {/* `grid-cols-5` needs to match `colCount` */}
-        <div className="grid grid-cols-5 justify-items-center relative">
+        <div className="grid grid-cols-4 justify-items-end relative">
           {/* Title */}
           <div className="font-bold justify-self-start pb-4">{title}</div>
 
           {/* File size */}
           <div>
-            {fileSizeBytes > 0 && (
-              <span className="absolute transform -translate-x-1/2">
-                {prettyBytes(fileSizeBytes)}
-              </span>
-            )}
+            <span className="absolute transform -translate-x-14">
+              {fileSizeBytes > 0
+                ? prettyBytes(fileSizeBytes)
+                : isUploading && 'chunk uploaded'}
+            </span>
             <TimelineDot
-              className="transform -translate-x-1/2 -bottom-2"
+              className="transform -translate-x-10 -bottom-2"
               state={
                 isRecording || isUploading || videoLink !== ''
                   ? 'active'
@@ -121,11 +120,25 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
           {/* Upload */}
           <div>
             <TimelineDot
-              className="transform -translate-x-1/2 -bottom-2"
+              className="transform -translate-x-10 -bottom-2"
               state={isUploading || videoLink !== '' ? 'active' : 'idle'}
               isDone={videoLink !== ''}
               variant={variant}
             />
+          </div>
+
+          {/* Elapsed time */}
+          <div className="justify-self-end text-right">
+            <span className="font-bold">
+              {shouldShowElapsedTime &&
+                prettyMilliseconds(totalDurationMs, {
+                  keepDecimalsOnWholeSeconds: true,
+                  secondsDecimalDigits: 2
+                })}
+            </span>
+            {videoLink !== '' && shouldShowSpeedTag ? (
+              <SpeedTag variant={'gradient'} timesFaster={2} />
+            ) : null}
           </div>
 
           {/* Video link */}
@@ -136,7 +149,7 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
               rel="noreferrer"
             >
               <TimelineDot
-                className={classNames('transform -translate-x-1/2', {
+                className={classNames('transform -translate-x-8', {
                   '-bottom-2': videoLink === '',
                   '-bottom-3': videoLink !== ''
                 })}
@@ -149,20 +162,6 @@ export const UploadTimeline: React.FC<UploadTimelineProps> = memo(
                 }
               />
             </a>
-          </div>
-
-          {/* Elapsed time */}
-          <div className="justify-self-end text-right">
-            <span className="font-bold">
-              {shouldShowElapsedTime &&
-                prettyMilliseconds(totalDurationMs, {
-                  keepDecimalsOnWholeSeconds: true,
-                  secondsDecimalDigits: 2
-                })}
-            </span>
-            {timesFaster !== undefined && shouldShowSpeedTag ? (
-              <SpeedTag variant={variant} timesFaster={timesFaster} />
-            ) : null}
           </div>
 
           {/* Progress bar */}

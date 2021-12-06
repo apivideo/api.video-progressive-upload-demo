@@ -17,7 +17,7 @@ import {
 import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
 
-const delegatedToken = 'to1S7hLQhcujK13kIc3bGHrn';
+const delegatedToken = 'to2VK54kYgXu0BRhsgoS5DiP';
 
 /**
  * We need a file size big enough to be able to compare the speed of
@@ -221,10 +221,8 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
                 totalDurationMs={pguDurationMs || durationMs}
                 videoLink={pguVideoLink}
                 isUploading={pguIsUploading}
-                timesFaster={pguTimesFaster}
-                shouldShowSpeedTag={
-                  pguTimesFaster !== undefined && pguTimesFaster > 1
-                }
+                timesFaster={2}
+                shouldShowSpeedTag={true}
               />
             </div>
             <UploadTimeline
@@ -232,13 +230,11 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               variant="uni"
               isRecording={isRecording}
               fileSizeBytes={sduBufferSizeBytes}
-              totalDurationMs={sduDurationMs || durationMs}
+              totalDurationMs={0}
               videoLink={sduVideoLink}
               isUploading={sduIsUploading}
-              timesFaster={sduTimesFaster}
-              shouldShowSpeedTag={
-                sduTimesFaster !== undefined && sduTimesFaster < 1
-              }
+              timesFaster={0}
+              shouldShowSpeedTag={false}
             />
           </div>
         </div>
@@ -247,16 +243,31 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
       <footer
         className={classNames(
           'mx-auto max-w-screen-xl px-8 pt-4 pb-12',
-          'flex items-center'
+          'flex items-center justify-between'
         )}
       >
-        <span className="flex-grow">
-          Try{' '}
-          <a className="text-lavenderGray underline" href="https://api.video">
-            api.video
-          </a>{' '}
-          for free
-        </span>
+        <div className="flex-grow max-w-lg">
+          <p>
+            Try{' '}
+            <a className="text-lavenderGray underline" href="https://api.video">
+              api.video
+            </a>{' '}
+            for free. |{' '}
+            <a
+              className="text-lavenderGray underline"
+              href="https://api.video/terms-and-conditions"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Terms
+            </a>
+          </p>
+          <p className="text-sm text-lavenderGray mt-1">
+            The end-to-end solution which enables you to easily build, scale and
+            operate on-demand and live streaming videos in your app, software or
+            platform.
+          </p>
+        </div>
         <a href="https://github.com/apivideo" target="_blank" rel="noreferrer">
           <IconGithubSvg />
         </a>
