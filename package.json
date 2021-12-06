@@ -2,7 +2,7 @@
   "name": "progressive-upload-demo",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
