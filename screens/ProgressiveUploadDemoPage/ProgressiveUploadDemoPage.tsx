@@ -9,6 +9,7 @@ import {
 } from '../../assets/svg';
 import { UploadTimeline } from '../../components/UploadTimeline';
 import { useStopWatch } from '../../hooks/useStopWatch';
+import CTAsection from './CTAsection';
 import { RecordButton } from './RecordButton';
 import {
   useMediaRecorderDemo,
@@ -144,7 +145,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>Progressive Upload Demo</title>
+        <title>api.video | Progressive Upload Demo</title>
         <meta name="description" content="Progressive Upload Demo" />
       </Head>
 
@@ -210,7 +211,7 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
           </div>
         </div>
 
-        <div className="mx-auto max-w-screen-xl p-8 bg-firefly-light rounded-none md:rounded-3xl">
+        <div className="mx-auto max-w-screen-xl p-8 bg-firefly-light rounded-none xl:rounded-3xl">
           <div className="pb-4">
             <div className="pb-12">
               <UploadTimeline
@@ -238,6 +239,10 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               shouldShowSpeedTag={false}
             />
           </div>
+        </div>
+
+        <div className="mx-auto max-w-screen-xl">
+          <CTAsection isRecording={isRecording} isUploading={isUploading} />
         </div>
       </main>
 
