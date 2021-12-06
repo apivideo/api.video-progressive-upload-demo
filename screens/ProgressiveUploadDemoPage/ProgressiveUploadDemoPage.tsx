@@ -120,20 +120,20 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
 
   const isUploading = sduIsUploading || pguIsUploading;
 
-  // const pguTimesFaster =
-  //   !isUploading &&
-  //   pguVideoLink !== '' &&
-  //   sduDurationMs !== 0 &&
-  //   pguDurationMs !== 0
-  //     ? sduDurationMs / pguDurationMs
-  //     : undefined;
-  // const sduTimesFaster =
-  //   !isUploading &&
-  //   sduVideoLink !== '' &&
-  //   sduDurationMs !== 0 &&
-  //   pguDurationMs !== 0
-  //     ? pguDurationMs / sduDurationMs
-  //     : undefined;
+  const _pguTimesFaster =
+    !isUploading &&
+    pguVideoLink !== '' &&
+    sduDurationMs !== 0 &&
+    pguDurationMs !== 0
+      ? sduDurationMs / pguDurationMs
+      : undefined;
+  const _sduTimesFaster =
+    !isUploading &&
+    sduVideoLink !== '' &&
+    sduDurationMs !== 0 &&
+    pguDurationMs !== 0
+      ? pguDurationMs / sduDurationMs
+      : undefined;
 
   useEffect(() => {
     if (!isUploading) {

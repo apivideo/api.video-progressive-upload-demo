@@ -14,7 +14,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
   "include": ["next-env-custom.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "next-env.d.ts"]
