@@ -17,7 +17,7 @@ import {
 import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
 
-const delegatedToken = 'to2VK54kYgXu0BRhsgoS5DiP';
+const delegatedToken = 'to2mnDziD9cH18l6OZcSWOIe';
 
 /**
  * We need a file size big enough to be able to compare the speed of
