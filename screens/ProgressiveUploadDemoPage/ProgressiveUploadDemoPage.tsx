@@ -166,12 +166,22 @@ export const ProgressiveUploadDemoPage: NextPage = () => {
               Save time and instantly share your recorded video. Try it below
               for yourself!
             </h2>
-            <RecordButton
-              recordingTimeLeftMs={recordingTimeLeftMs}
-              isRecording={isRecording}
-              isUploading={isUploading}
-              onClick={onStartRecording}
-            />
+            <div>
+              <RecordButton
+                recordingTimeLeftMs={recordingTimeLeftMs}
+                isRecording={isRecording}
+                isUploading={isUploading}
+                onClick={onStartRecording}
+              />
+              <a
+                className="py-3 px-5 rounded-md transition-all text-lavenderGray underline underline-d"
+                href="https://api.video/blog/tutorials/progressively-upload-large-video-files-without-compromising-on-speed"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Learn more
+              </a>
+            </div>
           </div>
           <div className="md:col-span-5 col-span-8">
             <div

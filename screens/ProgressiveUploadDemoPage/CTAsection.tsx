@@ -39,6 +39,8 @@ const CTAsection = ({ isRecording, isUploading }: CTAsectionProps) => {
           }
         )}
         href="https://dashboard.api.video/register"
+        target="_blank"
+        rel="noreferrer"
       >
         Get started
       </a>
