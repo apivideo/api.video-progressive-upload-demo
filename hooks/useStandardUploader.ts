@@ -36,7 +36,7 @@ export const useStandardUploader = (args: UseStandardUploaderArgs) => {
   );
 
   const uploadAll = useCallback(() => {
-    const file = new File(recordedBlobsRef.current, 'file');
+    const file = new File(recordedBlobsRef.current, 'upstream-demo-file');
 
     const uploader = new VideoUploader({
       file,
