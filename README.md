@@ -1,34 +1,26 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+[![badge](https://img.shields.io/twitter/follow/api_video?style=social)](https://twitter.com/intent/follow?screen_name=api_video) &nbsp; &nbsp;
+![](https://github.com/apivideo/API_OAS_file/blob/master/apivideo_banner.png)
 
-## Getting Started
+<h1 align="center">api.video Progressive upload demo</h1>
 
-First, run the development server:
+[api.video](https://api.video) is the video infrastructure for product builders. Lightning fast video APIs for integrating, scaling, and managing on-demand & low latency live streaming features in your app.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+# Table of contents
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- [Table of contents](#table-of-contents)
+- [Project description](#project-description)
+- [Getting started](#getting-started)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+# Project description
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+This project was built to demonstrate our progressive upload feature next to regular uploads.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Library used: @api.video/video-uploader
 
-## Learn More
+# Getting started
 
-To learn more about Next.js, take a look at the following resources:
+Clone the project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Install dependencies
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Run the app
