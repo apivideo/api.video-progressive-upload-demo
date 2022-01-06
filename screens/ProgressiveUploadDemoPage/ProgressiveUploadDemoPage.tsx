@@ -18,7 +18,11 @@ import {
 import { useProgressiveUploaderDemo } from './useProgressiveUploaderDemo';
 import { useStandardUploaderDemo } from './useStandardUploaderDemo';
 
-const delegatedToken = 'to2mnDziD9cH18l6OZcSWOIe';
+/*
+ * This demo uses a delegated upload token
+ * https://docs.api.video/reference/get_upload-tokens
+ */
+const delegatedToken = process.env.DELEGATED_TOKEN;
 
 /**
  * We need a file size big enough to be able to compare the speed of
