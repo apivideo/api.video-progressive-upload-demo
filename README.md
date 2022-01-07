@@ -15,7 +15,8 @@
 
 This project was built to demonstrate our progressive upload feature next to regular uploads.
 
-Library used: @api.video/video-uploader
+- nextjs
+- @api.video/video-uploader
 
 # Getting started
 
@@ -23,4 +24,17 @@ Clone the project
 
 Install dependencies
 
+```
+yarn install
+```
+
 Run the app
+
+```
+yarn dev
+```
+or
+```
+yarn build && yarn start
+```
+
