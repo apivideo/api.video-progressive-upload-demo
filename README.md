@@ -1,5 +1,5 @@
 [![badge](https://img.shields.io/twitter/follow/api_video?style=social)](https://twitter.com/intent/follow?screen_name=api_video) &nbsp; &nbsp;
-![](https://github.com/apivideo/API_OAS_file/blob/master/apivideo_banner.png)
+![](https://github.com/apivideo/.github/blob/main/assets/apivideo_banner.png)
 
 <h1 align="center">api.video Progressive upload demo</h1>
 
