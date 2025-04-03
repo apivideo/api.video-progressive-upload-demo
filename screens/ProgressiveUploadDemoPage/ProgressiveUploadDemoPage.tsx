@@ -22,7 +22,7 @@ import { useStandardUploaderDemo } from './useStandardUploaderDemo';
  * This demo uses a delegated upload token
  * https://docs.api.video/reference/get_upload-tokens
  */
-const delegatedToken = process.env.DELEGATED_TOKEN;
+const delegatedToken = 'to2mnDziD9cH18l6OZcSWOIe';
 
 /**
  * We need a file size big enough to be able to compare the speed of
